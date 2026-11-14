@@ -110,5 +110,141 @@ save();
 ['newName','newKcal','newProtein','newCarbs','newFat','newSat'].forEach(id=>$(id).value='');
 $('newPortion').value='100 g';
 alert('Artikel opgeslagen!');
-};render();
+};// === UITBREIDING VOEDING EN MIJN COACH ===
+
+const extraStyle = document.createElement('style');
+extraStyle.textContent = `
+.coachbox {background:#e8f2ec;padding:12px;border-radius:12px;margin-top:12px}
+.coachbox input {margin:8px 0}
+.voedingsbalk {height:12px;background:#e1e8e2;border-radius:10px;overflow:hidden;margin:6px 0 12px}
+.voedingsbalk span {display:block;height:100%;background:#23835b}
+.voedingsbalk.over span {background:#c45a45}
+`;
+document.head.appendChild(extraStyle);
+
+// Nieuwe coachpagina
+const coachNav = document.createElement('button');
+coachNav.textContent = 'Mijn coach';
+coachNav.dataset.page = 'coach';
+$('nav').appendChild(coachNav);
+
+const coachPage = document.createElement('section');
+coachPage.className = 'page';
+coachPage.id = 'coach';
+coachPage.innerHTML = `
+<div class="card">
+<h2>🚴 Mijn fiets- en voedingscoach</h2>
+<p class="muted">Stel een vraag over je fietsprestaties of voeding.</p>
+<label>Wat wil je weten?</label>
+<input id="coachVraag" placeholder="Bijv. Wat is mijn wattage per kilo?">
+<button class="primary" id="coachVraagKnop">Stel mijn vraag</button>
+<div id="coachAntwoord" class="coachbox">
+Voorbeelden: Wat is mijn W/kg? Word ik sterker? Krijg ik genoeg eiwitten binnen?
+</div>
+</div>`;
+$('main').appendChild(coachPage);
+
+coachNav.onclick = () => {
+document.querySelectorAll('nav button').forEach(x =>
+x.classList.toggle('active', x === coachNav));
+document.querySelectorAll('.page').forEach(x =>
+x.classList.toggle('active', x.id === 'coach'));
+};
+
+// Voedingsdiagrammen
+const voedingsKaart = document.createElement('div');
+voedingsKaart.className = 'card';
+voedingsKaart.innerHTML = `
+<h3>Dagelijkse voedingsdoelen</h3>
+<div id="eiwitDiagram"></div>
+<div id="vetDiagram"></div>
+<p class="muted">Eiwit: voorlopig richtdoel 120 gram.
+Verzadigd vet: voorlopig maximaal 20 gram.</p>`;
+$('food').appendChild(voedingsKaart);
+
+function updateVoedingDiagram() {
+const t = totals(todaysFoods());
+
+function balk(naam, waarde, doel, eenheid, maximum) {
+const percentage = Math.min(100, waarde / doel * 100);
+return `<p class="muted">${naam}: ${fmt(waarde)} / ${doel} ${eenheid}</p>
+<div class="voedingsbalk ${maximum && waarde > doel ? 'over' : ''}">
+<span style="width:${percentage}%"></span></div>`;
+}
+
+$('eiwitDiagram').innerHTML =
+balk('Eiwitten', t.protein, 120, 'g', false);
+
+$('vetDiagram').innerHTML =
+balk('Verzadigd vet', t.sat, 20, 'g', true);
+}
+
+const oudeRender = render;
+render = function() {
+oudeRender();
+updateVoedingDiagram();
+};
+
+// Antwoorden op vragen over fietsen en voeding
+function antwoordCoach(vraag) {
+const q = vraag.toLowerCase();
+const metingen = [...db.mornings].sort((a,b) =>
+b.date.localeCompare(a.date));
+const laatste = metingen[0] || {};
+const vorige = metingen[1] || {};
+const gewicht = laatste.weight;
+const ftp = laatste.ftp || 240;
+
+if (q.includes('w/kg') || q.includes('per kilo') || q.includes('wattage per kg')) {
+if (!gewicht) return 'Vul eerst je actuele gewicht in bij Ochtend.';
+return 'Je FTP is ' + ftp + ' watt. Bij ' + gewicht +
+' kg is dat ' + (ftp / gewicht).toFixed(2) +
+' watt per kilo.';
+}
+
+if (q.includes('sterker') || q.includes('beter') || q.includes('slechter')) {
+if (!gewicht || !vorige.weight || !vorige.ftp)
+return 'Ik heb minimaal twee metingen van je gewicht en FTP nodig om je vooruitgang te vergelijken.';
+const nu = ftp / gewicht;
+const toen = vorige.ftp / vorige.weight;
+return 'Je vorige waarde was ' + toen.toFixed(2) +
+' W/kg. Je huidige waarde is ' + nu.toFixed(2) +
+' W/kg. ' + (nu > toen ? 'Je bent vooruitgegaan!' :
+nu < toen ? 'Je W/kg is gedaald.' :
+'Je W/kg is gelijk gebleven.') +
+' Kijk altijd naar meerdere metingen.';
+}
+
+if (q.includes('eiwit')) {
+const t = totals(db.foods.filter(x => x.date === today));
+return 'Je hebt vandaag ' + fmt(t.protein) +
+' gram eiwit gegeten. Je voorlopige richtdoel is 120 gram. ' +
+(t.protein >= 120 ? 'Je hebt je doel gehaald.' :
+'Je hebt nog ongeveer ' + fmt(120-t.protein) + ' gram te gaan.');
+}
+
+if (q.includes('cholesterol') || q.includes('verzadigd vet')) {
+const t = totals(db.foods.filter(x => x.date === today));
+return 'Je hebt vandaag ' + fmt(t.sat) +
+' gram verzadigd vet geregistreerd. De voorlopige bovengrens is 20 gram. Vervang verzadigd vet waar mogelijk door onverzadigde vetten.';
+}
+
+if (q.includes('ftp')) {
+return 'Je laatst bekende FTP is ' + ftp + ' watt. Sla nieuwe FTP-metingen op bij Ochtend om je ontwikkeling te volgen.';
+}
+
+return 'Ik kan vragen beantwoorden over FTP, wattage per kilo, je vooruitgang, eiwitten en verzadigd vet. Probeer een van die onderwerpen.';
+}
+
+$('coachVraagKnop').onclick = () => {
+const vraag = $('coachVraag').value.trim();
+$('coachAntwoord').textContent = vraag ?
+antwoordCoach(vraag) : 'Typ eerst je vraag.';
+};
+
+$('coachVraag').addEventListener('keydown', e => {
+if (e.key === 'Enter') $('coachVraagKnop').click();
+});
+
+// === EINDE UITBREIDING ===render();
 </script></body></html>
