@@ -26,7 +26,22 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:15px}
 <section class="page" id="food">
  <div class="card"><h2>Voedingsdagboek</h2><label>Datum</label><input type="date" id="foodDate"><label>Zoek product in jouw database (61 artikelen)</label><input id="search" placeholder="Typ bijvoorbeeld volkorenbrood, banaan of kip..." autocomplete="off"><div id="results"></div>
  <div id="chosen" style="display:none"><h3 id="chosenName"></h3><p class="muted" id="chosenPortion"></p><label>Aantal porties</label><input id="qty" type="number" min="0.1" step="0.1" value="1"><label>Maaltijd</label><select id="meal"><option>Ontbijt</option><option>Lunch</option><option>Diner</option><option>Tussendoor</option></select><button class="primary" id="addFood">Voeg toe aan dagboek</button></div></div>
- <div class="card"><h3>Dagtotalen</h3><div class="totals"><div><b id="fKcal">0</b><small>kcal</small></div><div><b id="fP">0</b><small>eiwit g</small></div><div><b id="fC">0</b><small>KH g</small></div><div><b id="fSat">0</b><small>verz. vet g</small></div></div><p class="muted">V = totaal vet; verz. = verzadigd vet. Streepje in de bron blijft onbekend en telt niet mee.</p><div id="foodLog"></div></div>
+ <div class="card">
+<h3>Eigen artikel toevoegen</h3>
+<label>Naam van het artikel</label>
+<input id="newName" placeholder="Bijv. Magere kwark">
+<label>Portie</label>
+<input id="newPortion" value="100 g">
+<div class="grid">
+<div><label>Calorieën (kcal)</label><input id="newKcal" type="number"></div>
+<div><label>Eiwit (g)</label><input id="newProtein" type="number" step=".1"></div>
+<div><label>Koolhydraten (g)</label><input id="newCarbs" type="number" step=".1"></div>
+<div><label>Vet (g)</label><input id="newFat" type="number" step=".1"></div>
+</div>
+<label>Verzadigd vet (g)</label>
+<input id="newSat" type="number" step=".1" placeholder="Optioneel">
+<button class="primary" id="saveProduct">Artikel opslaan in mijn lijst</button>
+</div><div class="card"><h3>Dagtotalen</h3><div class="totals"><div><b id="fKcal">0</b><small>kcal</small></div><div><b id="fP">0</b><small>eiwit g</small></div><div><b id="fC">0</b><small>KH g</small></div><div><b id="fSat">0</b><small>verz. vet g</small></div></div><p class="muted">V = totaal vet; verz. = verzadigd vet. Streepje in de bron blijft onbekend en telt niet mee.</p><div id="foodLog"></div></div>
 </section>
 <section class="page" id="training">
  <div class="card"><h2>Training registreren</h2><label>Datum</label><input type="date" id="trainDate"><label>Type training</label><select id="trainType"><option>ROUVY Zone 2</option><option>ROUVY tempo</option><option>ROUVY interval</option><option>ROUVY herstel</option><option>Buitenrit</option><option>FTP-test</option><option>Overig</option></select><div class="grid"><div><label>Duur (minuten)</label><input id="duration" type="number" min="1" placeholder="60"></div><div><label>Afstand (km)</label><input id="distance" type="number" min="0" step=".1" placeholder="Bijv. 35"></div><div><label>Gem. vermogen (W)</label><input id="power" type="number" min="0" placeholder="Bijv. 150"></div><div><label>Gem. hartslag</label><input id="avgHr" type="number" min="0" placeholder="Bijv. 130"></div></div><label>Opmerking</label><textarea id="trainNote" rows="2" placeholder="Hoe voelde de training?"></textarea><button class="primary" id="saveTraining">Training opslaan</button></div>
@@ -46,6 +61,8 @@ const PRODUCTS = [["Aardappelen", "250 g", 190, 5, 41, 0.3, 0.1], ["Aardappels u
   ["Magere kwark (Picnic)", "100 g", 57, 10, 3.5, 0.2, 0.1], ["Ham", "1 plak (15 g)", 17, 3, 0.2, 0.5, 0.2], ["HealthyFit Whey (melk, oud)", "30 g + 200 ml", 206, 30, 10.8, 5, 3], ["HealthyFit Whey (water)", "30 g + water", 114, 23, 1.4, 2, 1], ["Herfst stoofschotel", "250 g", 225, 19, 16, 9, 3], ["Hummus", "30 g", 75, 2.5, 3, 6, 0.6], ["Kipfilet tuinkruiden", "1 plak (12 g)", 15, 2.5, 0.2, 0.4, 0.1], ["Kippenpoot met vel", "~90 g eetbaar", 190, 23, 0, 11, 3], ["Knoflooksaus", "~50 ml", 255, 0.5, 4, 27, 2.5], ["Lasagne (vega gehakt)", "300 g", 415, 27, 39, 16.5, 7], ["Loempia (airfryer)", "~120 g", 240, 8, 30, 10, 2], ["Mayonaise", "~30 g", 210, 0.3, 0.5, 23, 2], ["McVitie's Digestive", "1 koekje (~15 g)", 71, 1, 9.5, 3.1, null], ["Melkan Cottage Cheese Light", "50 g", 35, 6, 2.2, 0.3, 0.2], ["Nasi met kipfilet", "400 g", 600, 36, 72, 18, 3], ["Oude kaas 48+", "1 plak (20 g)", 80, 6, 0, 6.6, 4.3], ["Patat (snackbar)", "middel (~175 g)", 510, 6, 63, 25, 3], ["Pepperoni", "1 plak (6 g)", 30, 1.5, 0, 2.7, 1], ["Pita döner groot", "1 broodje", 620, 36, 55, 28, 11], ["Pulled chicken kamado", "~250 g kipfilet", 405, 58, 5, 16, 3], ["Rode gistrijst", "1 capsule", 2, 0, 0.3, 0, 0], ["Rode wijn", "125 ml", 90, 0.1, 3.5, 0, 0], ["Rookworst mager", "1/3 worst (~92 g)", 156, 14, 1.8, 10, 3.8], ["Rundvleeskroket", "~100 g", 250, 7, 21, 15, 5], ["Sla met uien", "~80 g", 25, 1.2, 5, 0.2, 0], ["Sla of rauwkost", "100 g", 15, 1, 2, 0.2, 0], ["Spaghetti vega gehakt", "1 portie", 650, 33, 85, 18, 3], ["Stroopwafel", "30 g", 140, 1, 20, 6, 3], ["Tijgerbrood wit", "1 snee (~35 g)", 90, 3, 16.5, 1.2, 0.3], ["Volkorenbrood", "1 snee (35 g)", 80, 3.5, 13, 1, 0.2], ["Walnoten", "25 g", 179, 4, 1.4, 17, 1.6], ["Wheyshake in halfvolle melk", "30 g + 200 ml", 207, 30, 12, 4.5, 2.9], ["Wit brood", "1 snee (35 g)", 85, 3, 16, 0.8, 0.2], ["Witte wijn (droog)", "125 ml", 85, 0.1, 3, 0, 0], ["Zeebaarsfilet", "150 g", 145, 27.5, 0, 3, 0.7], ["Zigeunerschnitzel", "~150 g", 230, 32, 4, 10, null]];
 const KEY='fietsVoedingCoach_v1';
 let db={foods:[],trainings:[],mornings:[]};
+ db.customProducts = Array.isArray(db.customProducts) ? db.customProducts : [];
+PRODUCTS.push(...db.customProducts);
 try{db={...db,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){}
 const $=id=>document.getElementById(id), today=new Date().toISOString().slice(0,10);
 ['foodDate','trainDate','morningDate'].forEach(id=>$(id).value=today);
@@ -75,5 +92,23 @@ $('importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let 
 $('csv').onclick=()=>{let rows=[['Datum','Maaltijd','Product','Portie','Aantal','kcal','Eiwit g','KH g','Vet g','Verzadigd vet g'],...db.foods.map(x=>[x.date,x.meal,x.product[0],x.product[1],x.qty,x.product[2]*x.qty,x.product[3]*x.qty,x.product[4]*x.qty,x.product[5]*x.qty,x.product[6]==null?'':x.product[6]*x.qty])];let csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\n');download(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),'voedingsdagboek-'+today+'.csv')};
 function download(blob,name){let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}
 $('clear').onclick=()=>{if(confirm('Weet je zeker dat je alle lokale gegevens wilt wissen? Maak eerst een back-up als je ze wilt bewaren.')){db={foods:[],trainings:[],mornings:[]};save()}}
-render();
+
+ $('saveProduct').onclick=()=>{
+let name=$('newName').value.trim();
+let portion=$('newPortion').value.trim();
+let kcal=Number($('newKcal').value);
+let protein=Number($('newProtein').value);
+let carbs=Number($('newCarbs').value);
+let fat=Number($('newFat').value);
+let sat=$('newSat').value===''?null:Number($('newSat').value);
+if(!name||!portion||$('newKcal').value===''||$('newProtein').value===''||$('newCarbs').value===''||$('newFat').value===''){alert('Vul alle verplichte velden in.');return}
+if(PRODUCTS.some(p=>p[0].toLowerCase()===name.toLowerCase())){alert('Dit artikel bestaat al.');return}
+let product=[name,portion,kcal,protein,carbs,fat,sat];
+db.customProducts.push(product);
+PRODUCTS.push(product);
+save();
+['newName','newKcal','newProtein','newCarbs','newFat','newSat'].forEach(id=>$(id).value='');
+$('newPortion').value='100 g';
+alert('Artikel opgeslagen!');
+};render();
 </script></body></html>
