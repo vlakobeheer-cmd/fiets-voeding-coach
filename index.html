@@ -1,354 +1,689 @@
 
+
 <!DOCTYPE html>
+
 <html lang="nl">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <meta name="theme-color" content="#173d32">
+
 <title>Fiets & Voeding Coach</title>
+
 <style>
+
 :root{--green:#173d32;--green2:#28634f;--light:#edf4ef;--bg:#f3f6f3;--card:#fff;--text:#20312a;--muted:#718078;--line:#e1e9e3;--red:#b64a42}
+
 *{box-sizing:border-box}
+
 body{margin:0;background:var(--bg);color:var(--text);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+
 header{background:var(--green);color:white;padding:25px 18px 20px}
+
 header h1{margin:0;font-size:24px}
+
 header p{margin:6px 0 0;color:#d5e5db;font-size:13px}
+
 nav{display:flex;gap:7px;overflow-x:auto;padding:10px;background:#fff;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}
+
 nav button{white-space:nowrap;border:0;border-radius:20px;padding:10px 13px;background:#edf2ee;color:var(--green);font-weight:650}
+
 nav button.active{background:var(--green);color:white}
+
 main{max-width:850px;margin:auto;padding:14px}
+
 .page{display:none}.page.active{display:block}
+
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px;margin-bottom:14px;box-shadow:0 2px 8px #173d3208}
+
 h2{font-size:19px;margin:0 0 14px}h3{font-size:16px;margin:0 0 12px}
+
 p{line-height:1.5}.muted{color:var(--muted);font-size:13px}
+
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+
 .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+
 .stat{background:var(--light);padding:13px;border-radius:12px}
+
 .stat span{display:block;color:var(--muted);font-size:12px}
+
 .stat strong{display:block;font-size:23px;margin-top:4px;color:var(--green)}
+
 label{display:block;font-size:13px;font-weight:650;margin:12px 0 5px}
+
 input,select,textarea{width:100%;padding:11px;border:1px solid #d7e1d9;border-radius:9px;background:white;color:var(--text);font:inherit}
+
 textarea{resize:vertical}
+
 button{cursor:pointer}
+
 .action{border:0;border-radius:10px;padding:12px 15px;font-weight:700;background:var(--green);color:white;margin-top:13px}
+
 .secondary{background:#eaf1ec;color:var(--green)}
+
 .danger{background:#faecea;color:var(--red);border:0;border-radius:8px;padding:8px 10px}
+
 .full{width:100%}
+
 .logitem{border-top:1px solid var(--line);padding:12px 0}
+
 .logitem:first-child{border-top:0}
+
 .logitem strong{display:block;margin-bottom:4px}
+
 .pill{display:inline-block;background:#eaf1ec;color:var(--green);border-radius:20px;padding:4px 8px;font-size:12px;margin:3px 3px 3px 0}
+
 .bar{height:9px;border-radius:10px;background:#e8eee9;overflow:hidden;margin:7px 0 12px}
+
 .bar span{display:block;height:100%;background:var(--green2);border-radius:10px}
+
 .result{background:#edf4ef;border-radius:12px;padding:14px;margin-top:12px;line-height:1.5}
+
 footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+
 .hidden{display:none}
+
 @media(min-width:600px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
 </style>
+
 </head>
+
 <body>
+
 <header>
+
 <h1>🚴 Fiets & Voeding Coach</h1>
+
 <p>Jouw persoonlijke overzicht van fietsen, voeding en herstel</p>
+
 </header>
+
 <nav>
+
 <button class="active" data-page="home">Overzicht</button>
+
 <button data-page="garmin">Garmin invoeren</button>
+
 <button data-page="training">Trainingen</button>
+
 <button data-page="food">Voeding</button>
+
 <button data-page="morning">Herstel</button>
+
 <button data-page="trends">Ontwikkeling</button>
+
 <button data-page="coach">Coach</button>
+
 </nav>
+
 <main>
 
 <section class="page active" id="home">
+
 <div class="card">
+
 <h2>Mijn voortgang</h2>
+
 <div class="stats">
+
 <div class="stat"><span>Gewicht</span><strong id="sWeight">—</strong><span>kg</span></div>
+
 <div class="stat"><span>FTP</span><strong id="sFtp">240</strong><span>watt</span></div>
+
 <div class="stat"><span>Vermogen per kilo</span><strong id="sWkg">—</strong><span>W/kg</span></div>
+
 <div class="stat"><span>HRV</span><strong id="sHrv">—</strong><span>ms</span></div>
+
 </div>
+
 </div>
+
 <div class="card">
+
 <h2>Vandaag</h2>
+
 <div class="stats">
+
 <div class="stat"><span>Calorieën</span><strong id="dKcal">0</strong><span>kcal</span></div>
+
 <div class="stat"><span>Eiwitten</span><strong id="dProtein">0</strong><span>gram</span></div>
+
 <div class="stat"><span>Verzadigd vet</span><strong id="dSat">0</strong><span>gram</span></div>
+
 <div class="stat"><span>Trainingen</span><strong id="dTrain">0</strong><span>geregistreerd</span></div>
+
 </div>
+
 <p class="muted" id="homeTraining">Nog geen training geregistreerd vandaag.</p>
+
 </div>
+
 <div class="card">
+
 <h2>Je doelen</h2>
+
 <p class="muted">Gewicht: 76 kg · Richtwaarde vermogen/gewicht: 3,3 W/kg</p>
+
 <div id="goalText" class="result">Vul je gewicht en FTP in om je voortgang te bekijken.</div>
+
 </div>
+
 <div class="card">
+
 <h2>Voeding vandaag</h2>
+
 <p class="muted">Eiwitdoel als praktische richtlijn: 120 gram per dag.</p>
+
 <div id="proteinBar"></div>
+
 <p class="muted">Let bij een verhoogd cholesterol vooral op de hoeveelheid verzadigd vet. De app gebruikt voedingswaarden als schatting.</p>
+
 </div>
+
 </section>
 
 <section class="page" id="garmin">
+
 <div class="card">
+
 <h2>⌚ Garmin-training invoeren</h2>
+
 <p class="muted">Vul na je fietstraining de gegevens van je Garmin Fenix 8 in. Niet elk veld is verplicht.</p>
+
 <label>Datum</label><input type="date" id="gDate">
+
 <label>Trainingstype</label>
+
 <select id="gType">
+
 <option>Fietsen binnen</option><option>Fietsen buiten</option><option>Zone 2</option><option>Tempo</option><option>Interval</option><option>Herstelrit</option><option>FTP-test</option><option>Overig</option>
+
 </select>
+
 <div class="grid">
+
 <div><label>Duur (minuten)</label><input type="number" id="gDuration" min="0"></div>
+
 <div><label>Afstand (km)</label><input type="number" id="gDistance" min="0" step=".1"></div>
+
 <div><label>Gemiddeld vermogen (W)</label><input type="number" id="gPower" min="0"></div>
+
 <div><label>Maximaal vermogen (W)</label><input type="number" id="gMaxPower" min="0"></div>
+
 <div><label>Gemiddelde hartslag</label><input type="number" id="gHr" min="0"></div>
+
 <div><label>Maximale hartslag</label><input type="number" id="gMaxHr" min="0"></div>
+
 <div><label>Gemiddelde cadans (rpm)</label><input type="number" id="gCadence" min="0"></div>
+
 <div><label>Training Effect aeroob</label><input type="number" id="gAerobic" min="0" max="5" step=".1"></div>
+
 <div><label>Training Effect anaeroob</label><input type="number" id="gAnaerobic" min="0" max="5" step=".1"></div>
+
 <div><label>Trainingsbelasting</label><input type="number" id="gLoad" min="0"></div>
+
 <div><label>Gemiddelde snelheid (km/u)</label><input type="number" id="gSpeed" min="0" step=".1"></div>
+
 <div><label>Calorieën verbrand</label><input type="number" id="gCalories" min="0"></div>
+
 </div>
+
 <label>Gevoel / opmerkingen</label><textarea id="gNote" rows="2" placeholder="Bijvoorbeeld: voelde gemakkelijk, frisse benen"></textarea>
+
 <button class="action full" id="saveGarmin">Garmin-training opslaan</button>
+
 <div id="garminFeedback" class="result hidden"></div>
+
 </div>
+
 <div class="card">
+
 <h3>Laatste Garmin-trainingen</h3>
+
 <div id="garminLog" class="muted">Nog geen Garmin-trainingen ingevoerd.</div>
+
 </div>
+
 </section>
 
 <section class="page" id="training">
+
 <div class="card">
+
 <h2>Training handmatig registreren</h2>
+
 <p class="muted">Voor trainingen waarvoor je niet alle Garmin-gegevens hebt.</p>
+
 <label>Datum</label><input type="date" id="trainDate">
+
 <label>Type training</label><input id="trainType" placeholder="Bijvoorbeeld ROUVY Zone 2">
+
 <div class="grid">
+
 <div><label>Duur (minuten)</label><input type="number" id="duration"></div>
+
 <div><label>Afstand (km)</label><input type="number" id="distance" step=".1"></div>
+
 <div><label>Gemiddeld vermogen (W)</label><input type="number" id="power"></div>
+
 <div><label>Gemiddelde hartslag</label><input type="number" id="avgHr"></div>
+
 </div>
+
 <label>Opmerking</label><textarea id="trainNote" rows="2"></textarea>
+
 <button class="action full" id="saveTraining">Training opslaan</button>
+
 </div>
+
 <div class="card"><h3>Trainingsoverzicht</h3><div id="trainingLog" class="muted"></div></div>
+
 </section>
 
 <section class="page" id="food">
+
 <div class="card">
+
 <h2>Voeding registreren</h2>
+
 <label>Datum</label><input type="date" id="foodDate">
+
 <label>Maaltijd</label><select id="meal"><option>Ontbijt</option><option>Lunch</option><option>Tussendoor</option><option>Avondeten</option><option>Drinken</option></select>
+
 <label>Zoek product</label><input id="search" placeholder="Bijvoorbeeld yoghurt, brood, kip...">
+
 <div id="results" class="muted"></div>
+
 <div id="chosen" class="result hidden"><strong id="chosenName"></strong><p id="chosenPortion" class="muted"></p><label>Aantal porties</label><input type="number" id="qty" value="1" min=".1" step=".1"><button class="action full" id="addFood">Toevoegen aan dagboek</button></div>
+
 </div>
+
 <div class="card">
+
 <h3>Eigen product toevoegen</h3>
+
 <p class="muted">Gebruik de voedingswaarden op de verpakking. Vul de waarden per portie in.</p>
+
 <label>Productnaam</label><input id="newName">
+
 <label>Portie (bijvoorbeeld 100 g of 1 stuk)</label><input id="newPortion" value="100 g">
+
 <div class="grid">
+
 <div><label>kcal</label><input type="number" id="newKcal"></div>
+
 <div><label>Eiwit (g)</label><input type="number" id="newProtein" step=".1"></div>
+
 <div><label>Koolhydraten (g)</label><input type="number" id="newCarbs" step=".1"></div>
+
 <div><label>Vet (g)</label><input type="number" id="newFat" step=".1"></div>
+
 <div><label>Verzadigd vet (g)</label><input type="number" id="newSat" step=".1"></div>
+
 </div>
+
 <button class="action full" id="saveProduct">Eigen product opslaan</button>
+
 </div>
+
 <div class="card">
+
 <h3>Dagoverzicht</h3>
+
 <div class="stats">
+
 <div class="stat"><span>Calorieën</span><strong id="fKcal">0</strong></div>
+
 <div class="stat"><span>Eiwit</span><strong id="fP">0</strong></div>
+
 <div class="stat"><span>Koolhydraten</span><strong id="fC">0</strong></div>
+
 <div class="stat"><span>Verzadigd vet</span><strong id="fSat">0</strong></div>
+
 </div>
+
 <div id="foodLog" class="muted"></div>
+
 </div>
+
 </section>
 
 <section class="page" id="morning">
+
 <div class="card">
+
 <h2>Ochtendmeting en herstel</h2>
+
 <label>Datum</label><input type="date" id="morningDate">
+
 <div class="grid">
+
 <div><label>Gewicht (kg)</label><input type="number" id="weight" step=".1"></div>
+
 <div><label>FTP (W)</label><input type="number" id="ftp" placeholder="240"></div>
+
 <div><label>HRV (ms)</label><input type="number" id="hrv"></div>
+
 <div><label>Rusthartslag (bpm)</label><input type="number" id="rhr"></div>
+
 <div><label>Slaap (uren)</label><input type="number" id="sleep" step=".1"></div>
+
 <div><label>Body Battery (0–100)</label><input type="number" id="bodyBattery" min="0" max="100"></div>
+
 </div>
+
 <label>Herstelgevoel / opmerkingen</label><textarea id="morningNote" rows="2" placeholder="Bijvoorbeeld: goed geslapen, vermoeid, stressvolle dag"></textarea>
+
 <button class="action full" id="saveMorning">Ochtendmeting opslaan</button>
+
 </div>
+
 <div class="card"><h3>Laatste metingen</h3><div id="morningLog" class="muted"></div></div>
+
 </section>
 
 <section class="page" id="trends">
+
 <div class="card">
+
 <h2>Ontwikkeling en prestaties</h2>
+
 <p class="muted">Je geregistreerde trainingen en metingen op een rij.</p>
+
 <div id="trendSummary" class="result"></div>
+
 <h3 style="margin-top:18px">Gewicht, FTP en W/kg</h3>
+
 <div id="trendLog"></div>
+
 </div>
+
 <div class="card">
+
 <h3>Trainingsgeschiedenis</h3><div id="trendTraining"></div>
+
 </div>
+
 <div class="card">
+
 <h3>Back-up en gegevens</h3>
+
 <p class="muted">Je gegevens worden lokaal in de browser opgeslagen. Maak regelmatig een reservekopie.</p>
+
 <button class="action full" id="export">Download volledige back-up</button>
+
 <label>Back-up terugzetten</label><input type="file" id="importFile" accept=".json,application/json">
+
 <button class="action secondary full" id="csv">Download voedingsdagboek CSV</button>
+
 </div>
+
 </section>
 
 <section class="page" id="coach">
+
 <div class="card">
+
 <h2>🤖 Mijn fiets- en voedingscoach</h2>
+
 <p class="muted">Stel een vraag over je prestaties, herstel of voeding. Deze gratis coach gebruikt je ingevoerde gegevens en vaste analyses; het is geen live ChatGPT-verbinding.</p>
+
 <label>Wat wil je weten?</label>
+
 <input id="coachVraag" placeholder="Bijvoorbeeld: word ik sterker?">
+
 <button class="action full" id="coachVraagKnop">Stel mijn vraag</button>
+
 <div id="coachAntwoord" class="result">Probeer bijvoorbeeld: Wat is mijn W/kg? Hoe gaat mijn FTP? Hoe is mijn herstel?</div>
+
 </div>
+
 </section>
 
 </main>
+
 <footer>Fiets & Voeding Coach · gratis · gegevens blijven op je eigen apparaat</footer>
 
 <script>
+
 const KEY='fietsVoedingCoach_v1';
+
 const PRODUCTS=[
+
 ["Appel","1 stuk (150 g)",80,.4,19,.3,0],
+
 ["Banaan","1 stuk (120 g)",105,1.3,27,.4,.1],
+
 ["Blauwe bessen","100 g",57,.7,14,.3,0],
+
 ["Broccoli","200 g",68,5.6,8,0.8,0],
+
 ["Havermout","40 g",148,5,24,3,0.6],
+
 ["Halfvolle yoghurt","250 ml",115,10,10,4,2.6],
+
 ["Magere kwark","100 g",57,10,3.5,.2,.1],
+
 ["Volkorenbrood","1 snee (35 g)",80,3.5,13,1,.2],
+
 ["Wit brood","1 snee (35 g)",85,3,16,.8,.2],
+
 ["Kipfilet beleg","1 plak (15 g)",16,3,.2,.3,.1],
+
 ["Gebakken kipfilet","100 g",165,31,0,3.6,1],
+
 ["Ei","1 stuk",77,7,.4,5.3,1.6],
+
 ["30+ kaas","20 g", sixty=60,6,0,3.5,2.2],
+
 ["48+ kaas","20 g",80,5,0,6.6,4.3],
+
 ["Pindakaas","15 g",90,3.5,2,7.5,1.5],
+
 ["Walnoten","25 g",179,4,1.4,17,1.6],
+
 ["Amandelen","25 g",145,5.3,2.5,12.5,.9],
+
 ["Olijfolie","1 eetlepel (10 g)",90,0,0,10,1.4],
+
 ["Zalm","150 g",280,30,0,17,3.5],
+
 ["Tonijn op water","100 g",116,26,0,1,.2],
+
 ["Aardappelen","250 g",190,5,41,.3,.1],
+
 ["Volkoren pasta gekookt","150 g",210,7.5,42,1.5,.3],
+
 ["Rijst gekookt","150 g",195,4,42,.5,.1],
+
 ["Linzen gekookt","150 g",174,13.5,30,.6,.1],
+
 ["Kikkererwten","100 g",164,8.9,27,2.6,.3],
+
 ["Avocado","50 g",80,1,4,7.5,1.1],
+
 ["Tomaat","100 g",18,.9,3.9,.2,0],
+
 ["Komkommer","100 g",15,.7,3.6,.1,0],
+
 ["Wheyshake met water","30 g",114,23,1.4,2,1],
+
 ["Bier pils","300 ml",125,1,9,0,0],
+
 ["Chips","25 g",135,1.5,13,8.5,.8],
+
 ["Chorizo","30 g",140,7,1,12,4.5]
+
 ];
+
 let db={foods:[],trainings:[],mornings:[],customProducts:[]};
+
 try{db={...db,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){}
+
 for(const k of ['foods','trainings','mornings','customProducts'])if(!Array.isArray(db[k]))db[k]=[];
+
 const products=[...PRODUCTS,...db.customProducts];
+
 const $=id=>document.getElementById(id);
+
 const today=()=>new Date().toLocaleDateString('sv-SE');
+
 const fmt=n=>Number(n||0).toLocaleString('nl-NL',{maximumFractionDigits:1});
+
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
 function save(){localStorage.setItem(KEY,JSON.stringify(db));render()}
+
 function setDates(){['gDate','trainDate','foodDate','morningDate'].forEach(id=>$(id).value=today())}
+
 function totals(items){return items.reduce((a,x)=>{let q=Number(x.qty)||1,p=x.product||[];a.kcal+=(p[2]||0)*q;a.protein+=(p[3]||0)*q;a.carbs+=(p[4]||0)*q;a.fat+=(p[5]||0)*q;a.sat+=(p[6]||0)*q;return a},{kcal:0,protein:0,carbs:0,fat:0,sat:0})}
+
 function currentWeight(){let m=[...db.mornings].filter(x=>x.weight).sort((a,b)=>b.date.localeCompare(a.date));return m[0]?.weight||null}
+
 function currentFtp(){let m=[...db.mornings].filter(x=>x.ftp).sort((a,b)=>b.date.localeCompare(a.date));return m[0]?.ftp||240}
+
 function renderFood(){
+
 let items=db.foods.filter(x=>x.date===$('foodDate').value),t=totals(items);
+
 $('fKcal').textContent=fmt(t.kcal);$('fP').textContent=fmt(t.protein);$('fC').textContent=fmt(t.carbs);$('fSat').textContent=fmt(t.sat);
+
 $('foodLog').innerHTML=items.map(x=>`<div class="logitem"><strong>${esc(x.product[0])} · ${fmt(x.qty)} portie(s)</strong><div class="muted">${esc(x.meal)} · ${fmt(x.product[2]*x.qty)} kcal · eiwit ${fmt(x.product[3]*x.qty)} g · verzadigd vet ${fmt((x.product[6]||0)*x.qty)} g</div><button class="danger" data-food-del="${esc(x.id)}">Verwijderen</button></div>`).join('')||'Nog geen producten voor deze dag.';
+
 document.querySelectorAll('[data-food-del]').forEach(b=>b.onclick=()=>{db.foods=db.foods.filter(x=>String(x.id)!==b.dataset.foodDel);save()});
+
 }
+
 function render(){
+
 renderFood();
+
 let m=[...db.mornings].sort((a,b)=>b.date.localeCompare(a.date)),last=m[0]||{};
+
 let w=currentWeight(),ftp=currentFtp();
+
 $('sWeight').textContent=w?fmt(w):'—';$('sFtp').textContent=ftp;$('sWkg').textContent=w?(ftp/w).toFixed(2):'—';$('sHrv').textContent=last.hrv||'—';
+
 let day=totals(db.foods.filter(x=>x.date===today()));
+
 $('dKcal').textContent=fmt(day.kcal);$('dProtein').textContent=fmt(day.protein);$('dSat').textContent=fmt(day.sat);
+
 let todays=db.trainings.filter(x=>x.date===today());
+
 $('dTrain').textContent=todays.length;
+
 $('homeTraining').textContent=todays.length?`${todays.length} training(en) vandaag geregistreerd.`:'Nog geen training geregistreerd vandaag.';
+
 $('proteinBar').innerHTML=`<p class="muted">${fmt(day.protein)} van 120 gram eiwit</p><div class="bar"><span style="width:${Math.min(100,day.protein/120*100)}%"></span></div>`;
+
 $('goalText').textContent=w?`Je huidige gewicht is ${fmt(w)} kg. Je FTP is ${ftp} watt. Dat is ${(ftp/w).toFixed(2)} W/kg. ${w>76?'Je zit nog '+fmt(w-76)+' kg boven je streefgewicht van 76 kg.':'Je hebt je streefgewicht bereikt of zit eronder.'}`:'Vul een ochtendmeting in met je gewicht en FTP.';
+
 $('trainingLog').innerHTML=renderTrainingList();
+
 $('garminLog').innerHTML=renderGarminList();
+
 $('morningLog').innerHTML=m.slice(0,15).map(x=>`<div class="logitem"><strong>${esc(x.date)}</strong><div class="muted">${x.weight?fmt(x.weight)+' kg · ':''}${x.ftp?x.ftp+' W FTP · ':''}${x.hrv?'HRV '+x.hrv+' ms · ':''}${x.rhr?'rustpols '+x.rhr+' bpm · ':''}${x.sleep?fmt(x.sleep)+' uur slaap · ':''}${x.bodyBattery?'Body Battery '+x.bodyBattery:''} ${esc(x.note||'')}</div></div>`).join('')||'Nog geen metingen.';
+
 $('trendLog').innerHTML=m.map(x=>`<div class="logitem"><strong>${esc(x.date)}</strong><div class="muted">${x.weight?fmt(x.weight)+' kg':'gewicht onbekend'} · ${x.ftp?x.ftp+' W FTP':'FTP onbekend'} ${x.weight&&x.ftp?'· '+(x.ftp/x.weight).toFixed(2)+' W/kg':''}</div></div>`).join('')||'Nog geen meetgegevens.';
+
 $('trendTraining').innerHTML=[...db.trainings].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,30).map(x=>`<div class="logitem"><strong>${esc(x.date)} · ${esc(x.type)}</strong><div class="muted">${x.duration||'—'} min · ${x.distance?fmt(x.distance)+' km · ':''}${x.power?x.power+' W gemiddeld':''}</div></div>`).join('')||'Nog geen trainingen.';
+
 let garmins=db.trainings.filter(x=>x.source==='garmin');
+
 let sum=garmins.reduce((a,x)=>a+(Number(x.duration)||0),0);
+
 $('trendSummary').textContent=`Je hebt ${db.trainings.length} trainingen geregistreerd, waarvan ${garmins.length} met Garmin-gegevens. De totale geregistreerde fietstijd is ${fmt(sum/60)} uur voor Garmin-trainingen.`;
+
 }
+
 function renderTrainingList(){return [...db.trainings].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="logitem"><strong>${esc(x.date)} · ${esc(x.type)}</strong><div class="muted">${x.duration||'—'} min · ${x.distance?fmt(x.distance)+' km · ':''}${x.power?x.power+' W · ':''}${x.hr?x.hr+' bpm':''} ${x.source==='garmin'?'<span class="pill">Garmin</span>':''} ${esc(x.note||'')}</div><button class="danger" data-train-del="${esc(x.id)}">Verwijderen</button></div>`).join('')||'Nog geen trainingen.'}
+
 function renderGarminList(){return [...db.trainings].filter(x=>x.source==='garmin').sort((a,b)=>b.date.localeCompare(a.date)).slice(0,20).map(x=>`<div class="logitem"><strong>${esc(x.date)} · ${esc(x.type)}</strong><div class="muted">${x.duration||'—'} min · ${x.distance?fmt(x.distance)+' km · ':''}${x.power?x.power+' W gemiddeld · ':''}${x.hr?x.hr+' bpm · ':''}${x.cadence?x.cadence+' rpm · ':''}${x.aerobic?'Aeroob '+x.aerobic+' · ':''}${x.load?'Belasting '+x.load:''}</div><button class="danger" data-train-del="${esc(x.id)}">Verwijderen</button></div>`).join('')||'Nog geen Garmin-trainingen ingevoerd.'}
+
 document.addEventListener('click',e=>{let b=e.target.closest('[data-train-del]');if(b){db.trainings=db.trainings.filter(x=>String(x.id)!==b.dataset.trainDel);save()}});
+
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===b.dataset.page))});
+
 let selected=null;
+
 $('search').oninput=()=>{let q=$('search').value.toLowerCase().trim();let hits=q?products.filter(p=>p[0].toLowerCase().includes(q)).slice(0,12):[];$('results').innerHTML=hits.map(p=>`<div class="logitem"><strong>${esc(p[0])}</strong><div class="muted">${esc(p[1])} · ${p[2]} kcal</div><button class="action secondary" data-pick="${products.indexOf(p)}">Kies</button></div>`).join('')||(q?'Geen product gevonden.':'Typ om producten te zoeken.');document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{selected=products[Number(b.dataset.pick)];$('chosen').classList.remove('hidden');$('chosenName').textContent=selected[0];$('chosenPortion').textContent=`Portie: ${selected[1]} · ${selected[2]} kcal`;})};
+
 $('addFood').onclick=()=>{if(!selected)return;db.foods.push({id:Date.now()+Math.random(),date:$('foodDate').value,meal:$('meal').value,qty:Number($('qty').value)||1,product:selected});$('search').value='';$('results').innerHTML='';$('chosen').classList.add('hidden');selected=null;save()};
+
 $('foodDate').onchange=renderFood;
+
 $('saveProduct').onclick=()=>{let name=$('newName').value.trim(),portion=$('newPortion').value.trim(),ids=['newKcal','newProtein','newCarbs','newFat','newSat'];if(!name||!portion||ids.some(id=>$(id).value==='')){alert('Vul alle velden in.');return}if(products.some(p=>p[0].toLowerCase()===name.toLowerCase())){alert('Dit product bestaat al.');return}let p=[name,portion,...ids.map(id=>Number($(id).value))];db.customProducts.push(p);products.push(p);['newName','newKcal','newProtein','newCarbs','newFat','newSat'].forEach(id=>$(id).value='');$('newPortion').value='100 g';save();alert('Product opgeslagen.')};
+
 function readNum(id){return $(id).value===''?null:Number($(id).value)}
+
 $('saveGarmin').onclick=()=>{
+
 let duration=readNum('gDuration');
+
 if(!duration){alert('Vul minimaal de trainingsduur in.');return}
+
 let x={id:Date.now()+Math.random(),source:'garmin',date:$('gDate').value,type:$('gType').value,duration,distance:readNum('gDistance'),power:readNum('gPower'),maxPower:readNum('gMaxPower'),hr:readNum('gHr'),maxHr:readNum('gMaxHr'),cadence:readNum('gCadence'),aerobic:readNum('gAerobic'),anaerobic:readNum('gAnaerobic'),load:readNum('gLoad'),speed:readNum('gSpeed'),calories:readNum('gCalories'),note:$('gNote').value};
+
 db.trainings.push(x);
+
 ['gDuration','gDistance','gPower','gMaxPower','gHr','gMaxHr','gCadence','gAerobic','gAnaerobic','gLoad','gSpeed','gCalories','gNote'].forEach(id=>$(id).value='');
+
 $('garminFeedback').classList.remove('hidden');
+
 let w=currentWeight();
+
 $('garminFeedback').textContent=x.power&&w?`Opgeslagen! Je gemiddelde vermogen was ${x.power} W. Bij je laatst bekende gewicht van ${w} kg is dat ${(x.power/w).toFixed(2)} W/kg. Dit is een berekening op basis van je gemiddelde vermogen, niet je FTP.`:'Je Garmin-training is opgeslagen. Je kunt de gegevens later terugzien bij Garmin en Ontwikkeling.';
+
 save();
+
 };
+
 $('saveTraining').onclick=()=>{let duration=readNum('duration');if(!duration){alert('Vul de trainingsduur in.');return}db.trainings.push({id:Date.now()+Math.random(),date:$('trainDate').value,type:$('trainType').value||'Fietsen',duration,distance:readNum('distance'),power:readNum('power'),hr:readNum('avgHr'),note:$('trainNote').value,source:'handmatig'});['duration','distance','power','avgHr','trainNote'].forEach(id=>$(id).value='');save()};
+
 $('saveMorning').onclick=()=>{let x={id:Date.now()+Math.random(),date:$('morningDate').value,weight:readNum('weight'),ftp:readNum('ftp'),hrv:readNum('hrv'),rhr:readNum('rhr'),sleep:readNum('sleep'),bodyBattery:readNum('bodyBattery'),note:$('morningNote').value};if(!x.weight&&!x.ftp&&!x.hrv&&!x.rhr&&!x.sleep&&!x.bodyBattery){alert('Vul minimaal één meetwaarde in.');return}db.mornings.push(x);['weight','ftp','hrv','rhr','sleep','bodyBattery','morningNote'].forEach(id=>$(id).value='');save()};
+
 function coach(q){
+
 let s=q.toLowerCase(),w=currentWeight(),ftp=currentFtp(),m=[...db.mornings].filter(x=>x.weight&&x.ftp).sort((a,b)=>a.date.localeCompare(b.date));
+
 if(s.includes('w/kg')||s.includes('per kilo'))return w?`Je laatst bekende FTP is ${ftp} watt. Bij ${w} kg is dat ${(ftp/w).toFixed(2)} W/kg.`:'Vul eerst je gewicht in bij Herstel.';
+
 if(s.includes('ftp')||s.includes('sterker')||s.includes('vooruitgang')||s.includes('beter')||s.includes('slechter')){if(m.length<2)return `Je laatst bekende FTP is ${ftp} watt. Voor een goede vergelijking heb ik minimaal twee metingen van gewicht en FTP nodig.`;let a=m[0],b=m[m.length-1],v1=a.ftp/a.weight,v2=b.ftp/b.weight;return `Op ${a.date} was je ${v1.toFixed(2)} W/kg (${a.ftp} W bij ${a.weight} kg). Op ${b.date} was dat ${v2.toFixed(2)} W/kg (${b.ftp} W bij ${b.weight} kg). ${v2>v1?'Je W/kg is gestegen.':v2<v1?'Je W/kg is gedaald.':'Je W/kg is gelijk gebleven.'} Vergelijk bij voorkeur meerdere metingen en vergelijkbare omstandigheden.`}
+
 if(s.includes('herstel')||s.includes('hrv')||s.includes('slaap')){let x=[...db.mornings].sort((a,b)=>b.date.localeCompare(a.date))[0];return x?`Je laatste ochtendmeting (${x.date}): HRV ${x.hrv??'niet ingevuld'} ms, rusthartslag ${x.rhr??'niet ingevuld'} bpm, slaap ${x.sleep??'niet ingevuld'} uur en Body Battery ${x.bodyBattery??'niet ingevuld'}. Kijk vooral naar je eigen trend over meerdere dagen; één meting zegt niet alles.`:'Vul je HRV, rusthartslag en slaap in bij Herstel.'}
+
 if(s.includes('eiwit')){let t=totals(db.foods.filter(x=>x.date===today()));return `Je hebt vandaag ${fmt(t.protein)} gram eiwit geregistreerd. De richtwaarde in deze app is 120 gram per dag.`}
+
 if(s.includes('cholesterol')||s.includes('verzadigd vet')){let t=totals(db.foods.filter(x=>x.date===today()));return `Je hebt vandaag ${fmt(t.sat)} gram verzadigd vet geregistreerd. Kies vaker onverzadigde vetten, volkorenproducten, groente, fruit en peulvruchten. De app-registratie is een schatting.`}
+
 if(s.includes('training'))return `Je hebt ${db.trainings.length} trainingen geregistreerd. Daarvan zijn ${db.trainings.filter(x=>x.source==='garmin').length} Garmin-trainingen.`;
+
 return 'Ik kan je helpen met W/kg, FTP-ontwikkeling, Garmin-trainingen, herstel, eiwitten en verzadigd vet. Stel een wat specifiekere vraag.'}
+
 $('coachVraagKnop').onclick=()=>{$('coachAntwoord').textContent=$('coachVraag').value.trim()?coach($('coachVraag').value.trim()):'Typ eerst je vraag.'};
+
 $('coachVraag').addEventListener('keydown',e=>{if(e.key==='Enter')$('coachVraagKnop').click()});
+
 function download(blob,name){let a=document.createElement('a'),u=URL.createObjectURL(blob);a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1500)}
+
 $('export').onclick=()=>download(new Blob([JSON.stringify({version:2,db},null,2)],{type:'application/json'}),'fietscoach-backup-'+today()+'.json');
+
 $('importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let x=JSON.parse(await f.text()),incoming=x.db||x;if(!Array.isArray(incoming.foods)||!Array.isArray(incoming.trainings))throw Error();db={foods:[],trainings:[],mornings:[],customProducts:[],...incoming};if(!Array.isArray(db.mornings))db.mornings=[];if(!Array.isArray(db.customProducts))db.customProducts=[];products.splice(0,products.length,...PRODUCTS,...db.customProducts);save();alert('Back-up teruggezet.')}catch(err){alert('Dit is geen geldige Fiets & Voeding Coach-back-up.')}e.target.value=''};
+
 $('csv').onclick=()=>{let rows=[['Datum','Maaltijd','Product','Portie','Aantal','kcal','Eiwit','Koolhydraten','Vet','Verzadigd vet'],...db.foods.map(x=>[x.date,x.meal,x.product[0],x.product[1],x.qty,x.product[2]*x.qty,x.product[3]*x.qty,x.product[4]*x.qty,x.product[5]*x.qty,x.product[6]*x.qty])];let csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\n');download(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),'voedingsdagboek-'+today()+'.csv')};
+
 setDates();
+
 render();
+
 </script>
+
 </body>
+
 </html>
