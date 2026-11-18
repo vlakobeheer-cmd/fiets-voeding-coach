@@ -1,402 +1,158 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#142b3b">
 <title>Fiets-, Herstel- en Voedingscoach</title>
 <style>
-:root{--bg:#f2f5f7;--card:#fff;--ink:#1b303e;--muted:#687985;--blue:#176b87;--green:#25845b;--orange:#c88729;--red:#b94b4b;--line:#dce4e9}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{background:#142b3b;color:white;padding:22px 16px 17px}
-header h1{font-size:21px;margin:0 0 5px}
-header p{margin:0;color:#c8d8e0;font-size:13px}
-nav{display:flex;overflow-x:auto;gap:7px;padding:10px;background:#203c4d;position:sticky;top:0;z-index:5}
-nav button{white-space:nowrap;border:0;border-radius:9px;padding:10px 13px;background:#345366;color:white;font-weight:600}
-nav button.active{background:#fff;color:#173447}
-main{max-width:1000px;margin:auto;padding:14px}
-section{display:none}
-section.active{display:block}
-h2{font-size:20px;margin:8px 0 14px}
-h3{font-size:16px;margin:4px 0 12px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:13px;box-shadow:0 2px 7px #102b3b08}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
-.stat{background:#f1f6f8;border-radius:11px;padding:12px}
-.stat strong{display:block;font-size:22px;margin-top:5px}
-.small{font-size:12px;color:var(--muted)}
-.muted{color:var(--muted)}
-label{display:block;font-weight:600;font-size:13px;margin:10px 0 5px}
-input,select,textarea{width:100%;padding:11px;border:1px solid #cbd7de;border-radius:9px;background:white;color:var(--ink);font:inherit}
-textarea{min-height:70px}
-button.primary,button.secondary,button.danger{border:0;border-radius:9px;padding:11px 14px;font-weight:650;margin-top:10px}
-button.primary{background:var(--blue);color:white}
-button.secondary{background:#e8f0f4;color:#24495d}
-button.danger{background:#faeaea;color:#963e3e}
-button:disabled{opacity:.5}
-.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.item{border-top:1px solid var(--line);padding:11px 0}
-.item:first-child{border-top:0}
-.pill{display:inline-block;border-radius:20px;padding:4px 9px;background:#e9f2f5;font-size:12px}
-.good{color:var(--green)}.warn{color:var(--orange)}.bad{color:var(--red)}
-table{width:100%;border-collapse:collapse;font-size:13px}
-td,th{text-align:left;padding:8px 5px;border-bottom:1px solid var(--line)}
-th{color:var(--muted)}
-progress{width:100%;height:12px;accent-color:var(--green)}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
-@media(min-width:700px){main{padding:22px}.row{grid-template-columns:repeat(3,minmax(0,1fr))}}
+:root{--navy:#142b3b;--blue:#246b8e;--teal:#2c8c7b;--bg:#f3f6f8;--card:#fff;--ink:#18232c;--muted:#637381;--line:#dce4e9;--red:#b84a4a;--amber:#a66b12}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+header{background:var(--navy);color:white;padding:22px 16px 16px}header h1{font-size:22px;margin:0 0 4px}header p{margin:0;color:#d7e4eb;font-size:13px}
+nav{display:flex;gap:7px;overflow:auto;padding:10px;background:#fff;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}
+nav button{border:0;border-radius:20px;padding:9px 13px;background:#edf2f5;color:#294354;white-space:nowrap;font-weight:600}
+nav button.active{background:var(--navy);color:white}
+main{max-width:980px;margin:auto;padding:14px}.page{display:none}.page.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px;margin:0 0 13px;box-shadow:0 2px 8px #102b3b08}
+h2{font-size:20px;margin:2px 0 12px}h3{font-size:16px;margin:0 0 9px}.muted,.hint{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+label{display:block;font-size:13px;font-weight:650;color:#405361;margin:0 0 4px}input,select,textarea{width:100%;border:1px solid #cbd6dd;border-radius:9px;padding:10px;background:white;color:var(--ink);font:inherit;min-width:0}textarea{min-height:70px}
+.field{margin-bottom:10px}.btn{border:0;border-radius:9px;background:var(--blue);color:#fff;padding:10px 14px;font-weight:700;font-size:14px;cursor:pointer}.btn.secondary{background:#e9f0f4;color:#24475c}.btn.danger{background:#a83e3e}.btn.small{padding:7px 10px;font-size:12px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.stat{background:#f1f6f8;border-radius:11px;padding:12px}.stat strong{display:block;font-size:22px;color:var(--navy)}.stat span{font-size:12px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:8px 5px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--muted);font-size:12px}
+.item{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}.item small{display:block;color:var(--muted)}
+.pill{display:inline-block;border-radius:20px;padding:4px 9px;background:#eaf3f6;color:#28536b;font-size:12px;font-weight:700}
+.notice{background:#fff8e9;border:1px solid #f0dfb8;border-radius:10px;padding:11px;font-size:13px;color:#6c501c}
+.good{color:#21765f}.bad{color:var(--red)}.bar{height:9px;background:#e8eef1;border-radius:9px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--teal)}
+canvas{width:100%;height:210px;display:block}
+@media(max-width:600px){main{padding:10px}.grid,.grid3{grid-template-columns:1fr 1fr}.card{padding:13px}.stat strong{font-size:19px}header{padding-top:18px}}
 </style>
 </head>
 <body>
-<header>
-<h1>🚴 Fiets-, Herstel- en Voedingscoach</h1>
-<p>Training · herstel · voeding · cholesterol</p>
-</header>
-
+<header><h1>Fiets-, Herstel- en Voedingscoach</h1><p>Persoonlijk overzicht van fietsen, herstel, voeding en cholesterol</p></header>
 <nav id="nav">
-<button class="active" data-tab="dashboard">Dashboard</button>
-<button data-tab="training">Training</button>
-<button data-tab="herstel">Herstel</button>
-<button data-tab="voeding">Voeding</button>
-<button data-tab="cholesterol">Cholesterol</button>
-<button data-tab="trends">Trends & back-up</button>
-<button data-tab="instellingen">Instellingen</button>
+<button class="active" data-page="dashboard">Overzicht</button><button data-page="food">Voeding</button><button data-page="chol">Cholesterol</button><button data-page="training">Training</button><button data-page="recovery">Herstel</button><button data-page="trends">Trends & back-up</button><button data-page="coach">Coach</button><button data-page="settings">Instellingen</button>
 </nav>
-
 <main>
-<section id="dashboard" class="active">
-<h2>Jouw overzicht</h2>
-<div class="grid" id="stats"></div>
-<div class="card"><h3>Coachadvies</h3><div id="coachAdvice"></div></div>
-<div class="card"><h3>Vandaag</h3><div id="todaySummary"></div></div>
-<div class="card"><h3>Jouw doelen</h3><div id="goals"></div></div>
+<section id="dashboard" class="page active">
+<div class="card"><h2>Goedemorgen</h2><p class="muted">Je persoonlijke registratie begint leeg. Je voedingsmiddelenbibliotheek is wel alvast gevuld met de 61 eerder ingevoerde producten.</p><div class="grid3" id="dashStats"></div></div>
+<div class="card"><h3>Vandaag in het kort</h3><div id="todaySummary" class="muted">Nog geen voeding of herstel geregistreerd voor vandaag.</div></div>
+<div class="card"><h3>Coachadvies</h3><div id="dashAdvice" class="muted">Vul je herstel, voeding en trainingen in. Dan bouwt de coach een persoonlijk beeld op.</div></div>
 </section>
-
-<section id="training">
-<h2>Training registreren</h2>
-<div class="card">
-<p class="small">Voer na je training handmatig de gegevens van je Garmin of Rouvy in.</p>
-<div class="row">
-<div><label>Datum</label><input id="tDate" type="date"></div>
-<div><label>Bron</label><select id="tSource"><option value="garmin">Garmin</option><option value="handmatig">Handmatig</option></select></div>
-<div><label>Trainingstype</label><select id="tType"><option>Zone 2 / duur</option><option>Interval / FTP</option><option>Herstelrit</option><option>Buitenrit</option><option>Anders</option></select></div>
-<div><label>Duur (minuten)</label><input id="tDuration" type="number" min="0"></div>
-<div><label>Afstand (km)</label><input id="tDistance" type="number" step=".1"></div>
-<div><label>Gemiddeld vermogen (W)</label><input id="tPower" type="number"></div>
-<div><label>Maximaal vermogen (W)</label><input id="tMaxPower" type="number"></div>
-<div><label>Gemiddelde hartslag</label><input id="tHr" type="number"></div>
-<div><label>Maximale hartslag</label><input id="tMaxHr" type="number"></div>
-<div><label>Gemiddelde cadans</label><input id="tCadence" type="number"></div>
-<div><label>Training load</label><input id="tLoad" type="number"></div>
-<div><label>Calorieën</label><input id="tCalories" type="number"></div>
-</div>
-<label>Opmerking</label><textarea id="tNote" placeholder="Hoe voelde de training?"></textarea>
-<button class="primary" onclick="addTraining()">Training opslaan</button>
-</div>
-<div class="card"><h3>Recente trainingen</h3><div id="trainingList"></div></div>
-</section>
-
-<section id="herstel">
-<h2>Dagelijkse meting & herstel</h2>
-<div class="card">
-<div class="row">
-<div><label>Datum</label><input id="mDate" type="date"></div>
-<div><label>Gewicht (kg)</label><input id="mWeight" type="number" step=".1"></div>
-<div><label>FTP (W)</label><input id="mFtp" type="number"></div>
-<div><label>HRV (ms)</label><input id="mHrv" type="number"></div>
-<div><label>Rusthartslag</label><input id="mRhr" type="number"></div>
-<div><label>Slaap (uren)</label><input id="mSleep" type="number" step=".1"></div>
-<div><label>Body Battery (0–100)</label><input id="mBattery" type="number" min="0" max="100"></div>
-<div><label>Spierpijn (0–10)</label><input id="mSoreness" type="number" min="0" max="10"></div>
-<div><label>Stress (0–10)</label><input id="mStress" type="number" min="0" max="10"></div>
-</div>
-<label>Hoe voel je je?</label>
-<select id="mFeeling"><option value="goed">Goed / fit</option><option value="normaal">Normaal</option><option value="moe">Vermoeid</option><option value="slecht">Slecht</option></select>
-<label>Gezondheid</label>
-<select id="mSymptoms"><option value="geen">Geen klachten</option><option value="mild">Lichte klachten</option><option value="ziek">Ziek / grieperig</option></select>
-<label>Opmerking</label><textarea id="mNote"></textarea>
-<button class="primary" onclick="addMorning()">Dagmeting opslaan</button>
-</div>
-<div class="card"><h3>Hersteladvies</h3><div id="recoveryAdvice"></div></div>
-<div class="card"><h3>Recente metingen</h3><div id="morningList"></div></div>
-</section>
-
-<section id="voeding">
-<h2>Voedingsdagboek</h2>
-<div class="card">
-<label>Datum</label><input id="foodDate" type="date" onchange="renderFood()">
-<label>Maaltijd</label><select id="foodMeal"><option>Ontbijt</option><option>Lunch</option><option>Tussendoor</option><option>Avondeten</option><option>Drinken</option></select>
-<label>Product</label><input id="foodName" list="foodOptions" placeholder="Bijvoorbeeld havermout" onchange="fillProduct()">
-<datalist id="foodOptions"></datalist>
-<div class="row">
-<div><label>Hoeveelheid (porties)</label><input id="foodQty" type="number" step=".25" value="1"></div>
-<div><label>Calorieën per portie</label><input id="foodKcal" type="number"></div>
-<div><label>Eiwit (g)</label><input id="foodProtein" type="number" step=".1"></div>
-<div><label>Koolhydraten (g)</label><input id="foodCarbs" type="number" step=".1"></div>
-<div><label>Vet (g)</label><input id="foodFat" type="number" step=".1"></div>
-<div><label>Verzadigd vet (g)</label><input id="foodSat" type="number" step=".1"></div>
-<div><label>Vezels (g)</label><input id="foodFiber" type="number" step=".1"></div>
-</div>
-<button class="primary" onclick="addFood()">Product toevoegen</button>
-</div>
-<div class="card"><h3>Dagoverzicht</h3><div id="foodTotals"></div><div id="foodList"></div></div>
-<div class="card"><h3>Eigen producten bewaren</h3>
-<p class="small">Bewaar een product zodat je het later sneller kunt invoeren.</p>
-<button class="secondary" onclick="saveCustomProduct()">Bewaar ingevuld product</button>
-<div id="customList"></div>
-</div>
-</section>
-
-<section id="cholesterol">
-<h2>❤️ Cholesterolcoach</h2>
-<div class="card">
-<h3>Jouw bloeduitslagen</h3>
-<p class="small">Vul je uitslagen in wanneer je ze bij de hand hebt. Eenheden: mmol/L.</p>
-<div class="row">
-<div><label>Datum bloedonderzoek</label><input id="cDate" type="date"></div>
-<div><label>Totaal cholesterol</label><input id="cTotal" type="number" step=".1"></div>
-<div><label>LDL-cholesterol</label><input id="cLdl" type="number" step=".1"></div>
-<div><label>HDL-cholesterol</label><input id="cHdl" type="number" step=".1"></div>
-<div><label>Triglyceriden</label><input id="cTrig" type="number" step=".1"></div>
-<div><label>Non-HDL (optioneel)</label><input id="cNonHdl" type="number" step=".1"></div>
-</div>
-<label>Opmerking</label><textarea id="cNote" placeholder="Bijvoorbeeld: niet nuchter geprikt"></textarea>
-<button class="primary" onclick="addCholesterol()">Bloeduitslag opslaan</button>
-</div>
-<div class="card"><h3>Jouw metingen</h3><div id="cholList"></div></div>
-<div class="card">
-<h3>Voeding en cholesterol</h3>
-<p>De voedingscoach kijkt naar verzadigd vet en vezels. Dat zijn belangrijke aandachtspunten bij het verbeteren van je cholesterol.</p>
+<section id="food" class="page">
+<div class="card"><h2>Voedingsdagboek</h2><p class="muted">Zoek een product, pas de portie aan en voeg het toe aan je dagboek. Zelf toegevoegde producten worden bewaard in je eigen productenlijst.</p>
+<div class="field"><label>Datum</label><input type="date" id="foodDate"></div>
+<div class="field"><label>Zoek voedingsproduct</label><input id="foodSearch" placeholder="Bijv. volkorenbrood, kipfilet, yoghurt..."></div>
+<div class="field"><label>Product</label><select id="foodProduct"></select></div>
 <div class="grid">
-<div class="stat"><span class="small">Verzadigd vet</span><strong>Beperken</strong><span class="small">Vervang boter, room, vet vlees en volvette kaas vaker door onverzadigde vetten.</span></div>
-<div class="stat"><span class="small">Vezels</span><strong>30–40 g</strong><span class="small">Streef naar voldoende vezels uit volkoren, groente, fruit en peulvruchten.</span></div>
+<div class="field"><label>Aantal porties</label><input id="foodQty" type="number" min=".1" step=".1" value="1"></div>
+<div class="field"><label>Maaltijd</label><select id="foodMeal"><option>Ontbijt</option><option>Lunch</option><option>Tussendoor</option><option>Avondeten</option><option>Drinken</option></select></div>
+</div><div id="productInfo" class="hint"></div><div class="actions"><button class="btn" id="addFood">Voeg toe aan dagboek</button></div>
 </div>
-<h3 style="margin-top:15px">Praktische keuzes</h3>
-<ul>
-<li>Kies vaker havermout en volkorenbrood.</li>
-<li>Neem dagelijks groente, fruit en ongezouten noten.</li>
-<li>Vervang boter en room vaker door olijfolie of zachte margarine.</li>
-<li>Kies vaker peulvruchten, vis en mager gevogelte.</li>
-<li>Beperk vette vleeswaren, snacks en volvette kaas.</li>
-</ul>
-<p class="small">Dit is algemene voedingsinformatie, geen medische diagnose. Bespreek je bloeduitslagen en persoonlijke LDL-doelwaarde met je huisarts. Die hangt onder andere af van je totale risico.</p>
-</div>
+<div class="card"><h3>Eigen voedingsproduct toevoegen</h3><p class="hint">Vul de voedingswaarden per portie in zoals op de verpakking of op basis van je recept.</p>
+<div class="grid"><div class="field"><label>Naam</label><input id="newName" placeholder="Productnaam"></div><div class="field"><label>Portie</label><input id="newPortion" placeholder="bijv. 100 g"></div>
+<div class="field"><label>Calorieën (kcal)</label><input id="newKcal" type="number" min="0"></div><div class="field"><label>Eiwit (g)</label><input id="newProtein" type="number" min="0" step=".1"></div>
+<div class="field"><label>Koolhydraten (g)</label><input id="newCarbs" type="number" min="0" step=".1"></div><div class="field"><label>Vet (g)</label><input id="newFat" type="number" min="0" step=".1"></div>
+<div class="field"><label>Verzadigd vet (g)</label><input id="newSat" type="number" min="0" step=".1"></div><div class="field"><label>Vezels (g, optioneel)</label><input id="newFiber" type="number" min="0" step=".1"></div></div>
+<button class="btn secondary" id="saveProduct">Bewaar product</button></div>
+<div class="card"><h3>Dagoverzicht</h3><div id="foodTotals"></div><div id="foodList"></div></div>
 </section>
-
-<section id="trends">
-<h2>Trends & back-up</h2>
-<div class="card"><h3>Gewicht en trainingsgegevens</h3><div id="trendSummary"></div></div>
-<div class="card"><h3>Back-up van je gegevens</h3>
-<p>Bewaar regelmatig een reservekopie. Deze bevat je voedingsdagboek, trainingen, metingen en cholesteroluitslagen.</p>
-<button class="primary" onclick="exportData()">Maak back-up (JSON)</button>
-<label>Back-up terugzetten</label><input type="file" id="importFile" accept=".json,application/json">
-<button class="secondary" onclick="importData()">Herstel back-up</button>
-<button class="secondary" onclick="exportCSV()">Exporteer trainingen als CSV</button>
-</div>
-<div class="card"><h3>Gegevens wissen</h3><p class="small">Gebruik dit alleen als je bewust alle gegevens wilt verwijderen.</p><button class="danger" onclick="clearData()">Wis alle gegevens</button></div>
+<section id="chol" class="page">
+<div class="card"><h2>Cholesterolmetingen</h2><p class="muted">Voer hier je bloeduitslagen over. Noteer ook of je nuchter was en eventuele bijzonderheden. De coach kan trends tonen, maar stelt geen diagnose.</p>
+<div class="grid"><div class="field"><label>Datum</label><input type="date" id="cholDate"></div><div class="field"><label>Nuchter geprikt?</label><select id="cholFasting"><option value="">Onbekend</option><option>Ja</option><option>Nee</option></select></div>
+<div class="field"><label>Totaal cholesterol (mmol/L)</label><input type="number" id="cholTotal" step=".1"></div><div class="field"><label>LDL (mmol/L)</label><input type="number" id="cholLDL" step=".1"></div>
+<div class="field"><label>HDL (mmol/L)</label><input type="number" id="cholHDL" step=".1"></div><div class="field"><label>Triglyceriden (mmol/L)</label><input type="number" id="cholTrig" step=".1"></div>
+<div class="field"><label>Non-HDL (mmol/L)</label><input type="number" id="cholNon" step=".1"></div><div class="field"><label>Opmerkingen</label><input id="cholNote" placeholder="Bijv. verkouden, alcohol, medicatie"></div></div>
+<button class="btn" id="saveChol">Sla cholesterolmeting op</button></div>
+<div class="card"><h3>Overzicht metingen</h3><div id="cholList" class="muted">Nog geen metingen ingevoerd.</div></div>
+<div class="notice">Cholesterolwaarden moeten altijd in samenhang worden beoordeeld met je leeftijd, bloeddruk, familiegeschiedenis en andere risicofactoren. Bespreek uitslagen en behandelkeuzes met je huisarts.</div>
 </section>
-
-<section id="instellingen">
-<h2>Instellingen & doelen</h2>
-<div class="card">
-<div class="row">
-<div><label>Gewicht (kg)</label><input id="sWeight" type="number" step=".1"></div>
-<div><label>Streefgewicht (kg)</label><input id="sGoalWeight" type="number" step=".1"></div>
-<div><label>FTP (W)</label><input id="sFtp" type="number"></div>
-<div><label>Lengte (cm)</label><input id="sHeight" type="number"></div>
-<div><label>Leeftijd</label><input id="sAge" type="number"></div>
-<div><label>Trainingen per week</label><input id="sFrequency" type="number" min="1" max="7"></div>
-<div><label>Dagelijks eiwitdoel (g)</label><input id="sProtein" type="number"></div>
-<div><label>Caloriedoel (kcal, optioneel)</label><input id="sCalories" type="number"></div>
-</div>
-<button class="primary" onclick="saveSettings()">Instellingen opslaan</button>
-</div>
-<div class="card"><h3>Trainingszones op basis van FTP</h3><div id="zones"></div></div>
-<div class="card"><h3>Belangrijk</h3><p class="small">Deze app is een persoonlijk hulpmiddel en vervangt geen arts, diëtist of sportmedisch advies. Gebruik hersteladviezen als indicatie en luister naar je lichaam.</p></div>
+<section id="training" class="page">
+<div class="card"><h2>Training registreren</h2><div class="grid"><div class="field"><label>Datum</label><input type="date" id="trainDate"></div><div class="field"><label>Type training</label><select id="trainType"><option>Fietsen binnen</option><option>Fietsen buiten</option><option>Wandelen</option><option>Overig</option></select></div>
+<div class="field"><label>Duur (minuten)</label><input type="number" id="trainDuration" min="1"></div><div class="field"><label>Afstand (km)</label><input type="number" id="trainDistance" min="0" step=".1"></div>
+<div class="field"><label>Gemiddeld vermogen (W)</label><input type="number" id="trainPower" min="0"></div><div class="field"><label>Gemiddelde hartslag</label><input type="number" id="trainHR" min="0"></div>
+<div class="field"><label>Gemiddelde snelheid (km/u)</label><input type="number" id="trainSpeed" min="0" step=".1"></div><div class="field"><label>Gevoel (1=makkelijk, 10=maximaal)</label><input type="number" id="trainFeel" min="1" max="10"></div></div>
+<div class="field"><label>Notities</label><textarea id="trainNote" placeholder="Bijv. Zone 2, intervallen, benen voelden goed..."></textarea></div><button class="btn" id="saveTraining">Sla training op</button></div>
+<div class="card"><h3>Trainingsgeschiedenis</h3><div id="trainingList" class="muted">Nog geen trainingen geregistreerd.</div></div>
+</section>
+<section id="recovery" class="page">
+<div class="card"><h2>Dagelijks herstel</h2><p class="muted">Vul je ochtendgegevens in. FTP staat bewust alleen bij Instellingen en hoeft niet dagelijks te worden ingevuld.</p>
+<div class="grid"><div class="field"><label>Datum</label><input type="date" id="recDate"></div><div class="field"><label>Gewicht (kg)</label><input type="number" id="recWeight" step=".1"></div>
+<div class="field"><label>Slaapuren</label><input type="number" id="sleepHours" min="0" max="24" step="1" placeholder="bijv. 7"></div><div class="field"><label>Slaapminuten</label><input type="number" id="sleepMinutes" min="0" max="59" step="1" placeholder="bijv. 30"></div>
+<div class="field"><label>Rusthartslag (bpm)</label><input type="number" id="recRhr"></div><div class="field"><label>HRV (ms)</label><input type="number" id="recHrv"></div>
+<div class="field"><label>Garmin Body Battery (optioneel)</label><input type="number" id="recBB" min="0" max="100"></div><div class="field"><label>Vermoeidheid (1–10)</label><input type="number" id="recFatigue" min="1" max="10"></div>
+<div class="field"><label>Spierpijn (1–10)</label><input type="number" id="recSoreness" min="1" max="10"></div><div class="field"><label>Stress (1–10)</label><input type="number" id="recStress" min="1" max="10"></div></div>
+<div class="field"><label>Hoe voel je je?</label><select id="recFeeling"><option value="">Kies...</option><option>Fit en energiek</option><option>Normaal</option><option>Vermoeid</option><option>Niet fit / ziekig</option></select></div>
+<div class="field"><label>Bijzonderheden</label><textarea id="recNote" placeholder="Bijv. alcohol, laat naar bed, ziekte, zware werkdag..."></textarea></div><button class="btn" id="saveRecovery">Sla herstel op</button></div>
+<div class="card"><h3>Herstelbeoordeling</h3><div id="recoveryAdvice" class="muted">Nog geen herstelgegevens ingevuld.</div></div>
+<div class="card"><h3>Herstelgeschiedenis</h3><div id="recoveryList" class="muted">Nog geen gegevens.</div></div>
+</section>
+<section id="trends" class="page">
+<div class="card"><h2>Trends</h2><p class="muted">Grafieken verschijnen zodra je gegevens hebt ingevoerd.</p><h3>Gewicht</h3><canvas id="weightChart" width="800" height="230"></canvas><h3>HRV</h3><canvas id="hrvChart" width="800" height="230"></canvas><h3>Training per week</h3><canvas id="trainingChart" width="800" height="230"></canvas></div>
+<div class="card"><h3>Back-up en herstellen</h3><p class="muted">Maak regelmatig een back-up. Het bestand bevat je dagboek, instellingen, trainingen, herstelgegevens en eigen producten.</p><div class="actions"><button class="btn" id="exportBackup">Download back-up (JSON)</button><label class="btn secondary" for="importFile" style="cursor:pointer">Herstel back-up</label><input type="file" id="importFile" accept=".json,application/json" hidden></div><div class="actions"><button class="btn secondary" id="exportCSV">Download voedingsdagboek (CSV)</button></div></div>
+</section>
+<section id="coach" class="page">
+<div class="card"><h2>Mijn coach</h2><p class="muted">De adviezen hieronder zijn gebaseerd op wat je zelf in deze app registreert en op je ingestelde doelen.</p><div id="coachAdvice">Voer eerst enkele dagen gegevens in om een bruikbare trend te krijgen.</div></div>
+<div class="card"><h3>Praktische aandachtspunten</h3><ul><li>Voor duurtrainingen is voldoende koolhydraatinname belangrijk; beperk je voeding niet onnodig op zware trainingsdagen.</li><li>Verdeel eiwitten over de dag en neem na een training een eiwitrijke maaltijd of snack.</li><li>Voor LDL-cholesterol helpt het doorgaans om verzadigd vet te vervangen door onverzadigd vet, bijvoorbeeld uit olijfolie, noten, zaden en vis.</li><li>Kies regelmatig volkorenproducten, peulvruchten, groente en fruit voor extra vezels.</li><li>Gebruik rusthartslag, HRV, slaap en hoe je je voelt samen; één meting bepaalt niet of je moet trainen.</li></ul></div>
+</section>
+<section id="settings" class="page">
+<div class="card"><h2>Instellingen en doelen</h2><p class="muted">Je begint met lege persoonlijke registraties. Vul hier de gegevens in die de coach nodig heeft. FTP wordt alleen hier beheerd.</p>
+<div class="grid"><div class="field"><label>Leeftijd</label><input id="sAge" type="number" min="1"></div><div class="field"><label>Lengte (cm)</label><input id="sHeight" type="number" min="1"></div>
+<div class="field"><label>Huidig gewicht (kg)</label><input id="sWeight" type="number" step=".1"></div><div class="field"><label>Streefgewicht (kg)</label><input id="sGoalWeight" type="number" step=".1"></div>
+<div class="field"><label>FTP (watt)</label><input id="sFTP" type="number" min="1"></div><div class="field"><label>Hartslagdrempel (bpm)</label><input id="sLTHR" type="number" min="1"></div>
+<div class="field"><label>Maximale hartslag (bpm, optioneel)</label><input id="sMaxHR" type="number" min="1"></div><div class="field"><label>Dagelijks eiwitdoel (g)</label><input id="sProtein" type="number" min="1"></div>
+<div class="field"><label>Max. richtwaarde verzadigd vet (g/dag)</label><input id="sSat" type="number" min="1"></div><div class="field"><label>Vezeldoel (g/dag)</label><input id="sFiber" type="number" min="1"></div>
+<div class="field"><label>Caloriedoel-aanpassing (kcal)</label><input id="sCalAdj" type="number" step="50"></div></div>
+<button class="btn" id="saveSettings">Bewaar instellingen</button><p class="hint" id="settingsSaved"></p></div>
+<div class="card"><h3>Over deze app</h3><p class="muted">Gegevens worden lokaal opgeslagen in deze browser op dit apparaat. Ze worden niet automatisch met andere apparaten gesynchroniseerd. Gebruik de back-upfunctie om gegevens over te zetten.</p><div class="notice">Let op: verwijder niet zomaar websitegegevens of browsergeschiedenis, want daarmee kun je lokaal opgeslagen gegevens kwijtraken.</div></div>
 </section>
 </main>
-<footer>Fiets-, Herstel- en Voedingscoach · Gegevens blijven op dit apparaat opgeslagen</footer>
-
 <script>
-'use strict';
-const KEY='fietsVoedingCoach_v1';
-const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
-const num=id=>{const v=document.getElementById(id).value;return v===''?null:Number(v)};
-const val=id=>document.getElementById(id).value;
-const set=(id,v)=>{document.getElementById(id).value=v??''};
-const fmt=(v,d=1)=>v==null||!Number.isFinite(Number(v))?'—':Number(v).toFixed(d);
+const KEY='fietsVoedingCoach_v2';
+const BUILTIN_PRODUCTS=[
+["Aardappelen","250 g",190,5,41,.3,.1],["Aardappels uit de airfryer","250 g + 1 tl olie",235,5,41,5,null],["AH Airfryer ovenfriet","100 g",142,2.2,25,3.2,.4],["AH Boomstammetjes ham en kaas","1 stuk (100 g)",291,17,8.2,21,0],["AH Gebraden gehakt","1 plak (~15 g)",37,2.1,.8,2.9,1.1],["AH Grillworst","1 plakje (~11,5 g)",30,1.7,.3,2.4,1],["AH Kipschnitzel","1 stuk (~103 g)",247,11.3,17.5,14.4,1.8],["Appel","1 stuk (150 g)",80,.4,19,.3,0],["Augurk (zoetzuur)","30 g",15,.2,3,.1,0],["Banaan","1 stuk (120 g)",105,1.3,27,.4,.1],["Bier (pils)","300 ml",125,1,9,0,0],["Bier 0.0%","300 ml",63,.5,14,0,0],["Boerenkoolstamppot","400 g",340,10,48,11,5],["Broodje gezond (slager)","1 pistolet",295,19.5,36,8,null],["Broodje Surinaamse warme kip","1 pistolet",430,28,46,14,4],["Champignons","70 g",15,2,.3,.3,0],["Chips","25 g",135,1.5,13,8.5,.8],["CN Whey Vanille (water)","25 g",97,20.3,1,1.7,1],["Ei (M)","1 stuk",77,7,.4,5.3,1.6],["Entrecote (rauw)","100 g",190,21,0,12,5],["Frikandel","1 stuk (~70 g)",200,9,6,16,6],["Geraspte kaas 48+","15 g",55,3.5,0,4.5,3],["Gerookte paling","100 g",315,18,0,27,6],["Gerookte zalm","100 g",165,22,0,8.5,1.7],["HAK Rode kool met appel","150 g",75,1.5,15,.2,0],["Halfvolle yoghurt","250 ml",115,10,10,4,2.6],["Magere kwark (Picnic)","100 g",57,10,3.5,.2,.1],["Ham","1 plak (15 g)",17,3,.2,.5,.2],["HealthyFit Whey (melk, oud)","30 g + 200 ml",206,30,10.8,5,3],["HealthyFit Whey (water)","30 g + water",114,23,1.4,2,1],["Herfst stoofschotel","250 g",225,19,16,9,3],["Hummus","30 g",75,2.5,3,6,.6],["Kipfilet tuinkruiden","1 plak (12 g)",15,2.5,.2,.4,.1],["Kippenpoot met vel","~90 g eetbaar",190,23,0,11,3],["Knoflooksaus","~50 ml",255,.5,4,27,2.5],["Lasagne (vega gehakt)","300 g",415,27,39,16.5,7],["Loempia (airfryer)","~120 g",240,8,30,10,2],["Mayonaise","~30 g",210,.3,.5,23,2],["McVitie's Digestive","1 koekje (~15 g)",71,1,9.5,3.1,null],["Melkan Cottage Cheese Light","50 g",35,6,2.2,.3,.2],["Nasi met kipfilet","400 g",600,36,72,18,3],["Oude kaas 48+","1 plak (20 g)",80,6,0,6.6,4.3],["Patat (snackbar)","middel (~175 g)",510,6,63,25,3],["Pepperoni","1 plak (6 g)",30,1.5,0,2.7,1],["Pita döner groot","1 broodje",620,36,55,28,11],["Pulled chicken kamado","~250 g kipfilet",405,58,5,16,3],["Rode gistrijst","1 capsule",2,0,.3,0,0],["Rode wijn","125 ml",90,.1,3.5,0,0],["Rookworst mager","1/3 worst (~92 g)",156,14,1.8,10,3.8],["Rundvleeskroket","~100 g",250,7,21,15,5],["Sla met uien","~80 g",25,1.2,5,.2,0],["Sla of rauwkost","100 g",15,1,2,.2,0],["Spaghetti vega gehakt","1 portie",650,33,85,18,3],["Stroopwafel","30 g",140,1,20,6,3],["Tijgerbrood wit","1 snee (~35 g)",90,3,16.5,1.2,.3],["Volkorenbrood","1 snee (35 g)",80,3.5,13,1,.2],["Walnoten","25 g",179,4,1.4,17,1.6],["Wheyshake in halfvolle melk","30 g + 200 ml",207,30,12,4.5,2.9],["Wit brood","1 snee (35 g)",85,3,16,.8,.2],["Witte wijn (droog)","125 ml",85,.1,3,0,0],["Zeebaarsfilet","150 g",145,27.5,0,3,.7],["Zigeunerschnitzel","~150 g",230,32,4,10,null]
+];
+const blank=()=>({foods:[],trainings:[],mornings:[],cholesterol:[],customProducts:[],settings:{}});
+let db=blank();
+try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&typeof saved==='object')db={...blank(),...saved,settings:{...(saved.settings||{})}}}catch(e){}
+const $=id=>document.getElementById(id), today=()=>new Date().toLocaleDateString('en-CA');
+const n=(id)=>{const v=$(id).value;return v===''?null:Number(v)};
+const val=(id,v)=>$(id).value=v??'';
+const fmt=(v,d=1)=>v==null||!Number.isFinite(Number(v))?'—':Number(v).toLocaleString('nl-NL',{maximumFractionDigits:d});
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let db={};
-try{db=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){db={}}
-db.foods=Array.isArray(db.foods)?db.foods:[];
-db.trainings=Array.isArray(db.trainings)?db.trainings:[];
-db.mornings=Array.isArray(db.mornings)?db.mornings:[];
-db.customProducts=Array.isArray(db.customProducts)?db.customProducts:[];
-db.cholesterol=Array.isArray(db.cholesterol)?db.cholesterol:[];
-db.settings=Object.assign({weight:79,goalWeight:76,ftp:225,height:183,age:54,frequency:3,protein:120,calories:0},db.settings||{});
-function save(){localStorage.setItem(KEY,JSON.stringify(db));render()}
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function sorted(a){return [...a].sort((x,y)=>(y.date||'').localeCompare(x.date||''))}
-function byDate(a,date){return a.filter(x=>x.date===date)}
-function setDefaults(){
-['tDate','mDate','foodDate','cDate'].forEach(id=>set(id,today()));
-}
-document.getElementById('nav').addEventListener('click',e=>{
-const b=e.target.closest('button[data-tab]');if(!b)return;
-document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));
-document.querySelectorAll('main section').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));
-render();
-});
-function addTraining(){
-const o={id:uid(),date:val('tDate')||today(),source:val('tSource'),type:val('tType'),duration:num('tDuration'),distance:num('tDistance'),power:num('tPower'),maxPower:num('tMaxPower'),hr:num('tHr'),maxHr:num('tMaxHr'),cadence:num('tCadence'),load:num('tLoad'),calories:num('tCalories'),note:val('tNote')};
-if(!o.duration&&!o.distance&&!o.power){alert('Vul minimaal duur, afstand of vermogen in.');return}
-db.trainings.push(o);save();
-['tDuration','tDistance','tPower','tMaxPower','tHr','tMaxHr','tCadence','tLoad','tCalories','tNote'].forEach(id=>set(id,''));
-alert('Training opgeslagen.');
-}
-function addMorning(){
-const o={id:uid(),date:val('mDate')||today(),weight:num('mWeight'),ftp:num('mFtp'),hrv:num('mHrv'),rhr:num('mRhr'),sleep:num('mSleep'),bodyBattery:num('mBattery'),soreness:num('mSoreness'),stress:num('mStress'),feeling:val('mFeeling'),symptoms:val('mSymptoms'),note:val('mNote')};
-if(Object.values(o).every(v=>v===null||v===undefined||v==='')){alert('Vul ten minste één meting in.');return}
-db.mornings.push(o);save();alert('Dagmeting opgeslagen.');
-}
-function addFood(){
-const name=val('foodName').trim(),qty=num('foodQty')||1;
-if(!name){alert('Vul een productnaam in.');return}
-const product=[name,1,num('foodKcal')||0,num('foodProtein')||0,num('foodCarbs')||0,num('foodFat')||0,num('foodSat')||0,num('foodFiber')||0];
-db.foods.push({id:uid(),date:val('foodDate')||today(),meal:val('foodMeal'),qty,product});
-save();set('foodName','');alert('Product toegevoegd.');
-}
-function saveCustomProduct(){
-const name=val('foodName').trim();if(!name){alert('Vul eerst een productnaam in.');return}
-const p=[name,1,num('foodKcal')||0,num('foodProtein')||0,num('foodCarbs')||0,num('foodFat')||0,num('foodSat')||0,num('foodFiber')||0];
-const i=db.customProducts.findIndex(x=>x[0]===name);
-if(i>=0)db.customProducts[i]=p;else db.customProducts.push(p);
-save();alert('Eigen product bewaard.');
-}
-function fillProduct(){
-const p=db.customProducts.find(x=>x[0].toLowerCase()===val('foodName').trim().toLowerCase());
-if(!p)return;
-set('foodKcal',p[2]);set('foodProtein',p[3]);set('foodCarbs',p[4]);set('foodFat',p[5]);set('foodSat',p[6]);set('foodFiber',p[7]||0);
-}
-function removeItem(type,id){
-if(!confirm('Wil je deze registratie verwijderen?'))return;
-db[type]=db[type].filter(x=>x.id!==id);save();
-}
-function addCholesterol(){
-const o={id:uid(),date:val('cDate')||today(),total:num('cTotal'),ldl:num('cLdl'),hdl:num('cHdl'),triglycerides:num('cTrig'),nonHdl:num('cNonHdl'),note:val('cNote')};
-if([o.total,o.ldl,o.hdl,o.triglycerides,o.nonHdl].every(v=>v===null)){alert('Vul minimaal één cholesterolwaarde in.');return}
-db.cholesterol.push(o);save();
-['cTotal','cLdl','cHdl','cTrig','cNonHdl','cNote'].forEach(id=>set(id,''));
-alert('Bloeduitslag opgeslagen.');
-}
-function recovery(){
-const ms=sorted(db.mornings),m=ms[0];if(!m)return {text:'Vul je herstelmeting in voor een persoonlijk advies.',level:'warn'};
-if(m.symptoms==='ziek')return {text:'Je hebt aangegeven dat je ziek bent. Neem rust en train niet intensief. Hervat rustig wanneer je hersteld bent.',level:'bad'};
-if(m.symptoms==='mild')return {text:'Je hebt lichte klachten. Kies liever rust of een zeer rustige rit als je je goed genoeg voelt.',level:'warn'};
-let score=0,notes=[];
-const prev=ms.slice(1,8);
-const avg=k=>{const a=prev.map(x=>Number(x[k])).filter(x=>Number.isFinite(x)&&x>0);return a.length>=3?a.reduce((s,v)=>s+v,0)/a.length:null};
-const hrvAvg=avg('hrv'),rhrAvg=avg('rhr');
-if(m.sleep!=null&&m.sleep<6){score++;notes.push('weinig slaap')}
-if(m.bodyBattery!=null&&m.bodyBattery<35){score++;notes.push('lage Body Battery')}
-if(m.soreness!=null&&m.soreness>=6){score++;notes.push('veel spierpijn')}
-if(m.stress!=null&&m.stress>=7){score++;notes.push('hoge stress')}
-if(m.feeling==='slecht'||m.feeling==='moe'){score++;notes.push('je voelt je vermoeid')}
-if(hrvAvg&&m.hrv&&m.hrv<hrvAvg*.9){score++;notes.push('HRV lager dan je recente gemiddelde')}
-if(rhrAvg&&m.rhr&&m.rhr>rhrAvg+5){score++;notes.push('rusthartslag hoger dan je gemiddelde')}
-if(score>=2)return {text:'Herstel lijkt vandaag minder goed. '+notes.join(', ')+'. Kies rust of hooguit een rustige Zone 1/2-rit. Stel intensieve intervallen uit.',level:'warn'};
-if(score===1)return {text:'Er is één aandachtspunt: '+notes.join(', ')+'. Houd je training beheerst en beoordeel onderweg hoe je je voelt.',level:'warn'};
-return {text:'Je ingevoerde signalen geven geen duidelijke waarschuwing. Een geplande training kan passend zijn. Blijf luisteren naar je lichaam.',level:'good'};
-}
-function totals(date){
-const foods=byDate(db.foods,date);
-const t={kcal:0,protein:0,carbs:0,fat:0,sat:0,fiber:0};
-foods.forEach(f=>{const p=f.product||[];const q=Number(f.qty)||1;t.kcal+=(Number(p[2])||0)*q;t.protein+=(Number(p[3])||0)*q;t.carbs+=(Number(p[4])||0)*q;t.fat+=(Number(p[5])||0)*q;t.sat+=(Number(p[6])||0)*q;t.fiber+=(Number(p[7])||0)*q});
-return {foods,t};
-}
-function renderFood(){
-const date=val('foodDate')||today(),{foods,t}=totals(date);
-document.getElementById('foodTotals').innerHTML=`<div class="grid">
-<div class="stat">Calorieën<strong>${fmt(t.kcal,0)} kcal</strong></div>
-<div class="stat">Eiwit<strong>${fmt(t.protein)} g</strong></div>
-<div class="stat">Koolhydraten<strong>${fmt(t.carbs)} g</strong></div>
-<div class="stat">Vet<strong>${fmt(t.fat)} g</strong></div>
-<div class="stat">Verzadigd vet<strong>${fmt(t.sat)} g</strong></div>
-<div class="stat">Vezels<strong>${fmt(t.fiber)} g</strong></div></div>
-<p class="small">Vezels: ${t.fiber>=30?'Mooi, je haalt 30 gram of meer.':'Je kunt nog extra vezels toevoegen met volkorenproducten, groente, fruit of peulvruchten.'}</p>`;
-document.getElementById('foodList').innerHTML=foods.length?foods.map(f=>`<div class="item"><strong>${esc(f.meal)} – ${esc(f.product?.[0]||'Product')}</strong><br><span class="small">${fmt(f.qty,2)} portie(s) · ${fmt((f.product?.[2]||0)*f.qty,0)} kcal · ${fmt((f.product?.[6]||0)*f.qty)} g verzadigd vet · ${fmt((f.product?.[7]||0)*f.qty)} g vezels</span><br><button class="danger" onclick="removeItem('foods','${f.id}')">Verwijderen</button></div>`).join(''):'<p class="muted">Nog geen producten ingevoerd voor deze datum.</p>';
-}
-function render(){
-const s=db.settings,ms=sorted(db.mornings),ts=sorted(db.trainings),latest=ms[0],w=latest?.weight??s.weight,ftp=latest?.ftp??s.ftp;
-const weekAgo=new Date();weekAgo.setDate(weekAgo.getDate()-6);const weekStr=weekAgo.toISOString().slice(0,10);
-const weekly=ts.filter(x=>x.date>=weekStr&&x.date<=today());
-const {t}=totals(today());
-document.getElementById('stats').innerHTML=`
-<div class="stat"><span class="small">Gewicht</span><strong>${fmt(w)} kg</strong></div>
-<div class="stat"><span class="small">FTP</span><strong>${fmt(ftp,0)} W</strong></div>
-<div class="stat"><span class="small">Watt per kilo</span><strong>${w?fmt(ftp/w,2):'—'}</strong></div>
-<div class="stat"><span class="small">HRV</span><strong>${latest?.hrv??'—'} ms</strong></div>
-<div class="stat"><span class="small">Rusthartslag</span><strong>${latest?.rhr??'—'} bpm</strong></div>
-<div class="stat"><span class="small">Trainingen deze week</span><strong>${weekly.length}</strong></div>`;
-const rec=recovery();
-document.getElementById('coachAdvice').innerHTML=`<p class="${rec.level}">${rec.text}</p><p class="small">Dit advies gebruikt je ingevoerde slaap, HRV, rusthartslag, Body Battery, spierpijn en hoe je je voelt. Het is geen medische meting.</p>`;
-document.getElementById('todaySummary').innerHTML=`<p><strong>Voeding vandaag:</strong> ${fmt(t.kcal,0)} kcal · ${fmt(t.protein)} g eiwit · ${fmt(t.sat)} g verzadigd vet · ${fmt(t.fiber)} g vezels.</p><p><strong>Trainingen vandaag:</strong> ${byDate(db.trainings,today()).length}</p>`;
-document.getElementById('goals').innerHTML=`<p>Gewicht: ${fmt(w)} kg · streefgewicht: ${fmt(s.goalWeight)} kg</p><p>FTP: ${fmt(ftp,0)} W · ${w?fmt(ftp/w,2):'—'} W/kg</p><p>Trainingsdoel: ${s.frequency} per week · deze week: ${weekly.length}</p>`;
-document.getElementById('trainingList').innerHTML=ts.length?ts.slice(0,20).map(x=>`<div class="item"><strong>${esc(x.date)} – ${esc(x.type)}</strong><br><span class="small">${x.duration??'—'} min · ${fmt(x.distance)} km · ${x.power??'—'} W gemiddeld · HR ${x.hr??'—'} bpm</span><br>${esc(x.note||'')}<br><button class="danger" onclick="removeItem('trainings','${x.id}')">Verwijderen</button></div>`).join(''):'<p class="muted">Nog geen trainingen ingevoerd.</p>';
-document.getElementById('recoveryAdvice').innerHTML=`<p class="${rec.level}">${rec.text}</p>`;
-document.getElementById('morningList').innerHTML=ms.length?ms.slice(0,15).map(x=>`<div class="item"><strong>${esc(x.date)}</strong><br><span class="small">Gewicht ${fmt(x.weight)} kg · FTP ${x.ftp??'—'} W · HRV ${x.hrv??'—'} · rustpols ${x.rhr??'—'} · slaap ${fmt(x.sleep)} uur · BB ${x.bodyBattery??'—'}</span><br><button class="danger" onclick="removeItem('mornings','${x.id}')">Verwijderen</button></div>`).join(''):'<p class="muted">Nog geen metingen.</p>';
-document.getElementById('cholList').innerHTML=sorted(db.cholesterol).map(x=>`<div class="item"><strong>${esc(x.date)}</strong><br><span class="small">Totaal ${fmt(x.total)} · LDL ${fmt(x.ldl)} · HDL ${fmt(x.hdl)} · triglyceriden ${fmt(x.triglycerides)} · non-HDL ${fmt(x.nonHdl)} mmol/L</span><br>${esc(x.note||'')}<br><button class="danger" onclick="removeItem('cholesterol','${x.id}')">Verwijderen</button></div>`).join('')||'<p class="muted">Je hebt nog geen bloeduitslagen ingevoerd.</p>';
-document.getElementById('trendSummary').innerHTML=`<p>Aantal trainingen: ${db.trainings.length}</p><p>Aantal herstelmetingen: ${db.mornings.length}</p><p>Aantal voedingsregels: ${db.foods.length}</p><p>Aantal cholesterolmetingen: ${db.cholesterol.length}</p>`;
-document.getElementById('customList').innerHTML=db.customProducts.map(p=>`<div class="item">${esc(p[0])} <span class="small">(${p[2]} kcal, ${p[6]} g verzadigd vet, ${p[7]||0} g vezels)</span></div>`).join('');
-document.getElementById('foodOptions').innerHTML=db.customProducts.map(p=>`<option value="${esc(p[0])}"></option>`).join('');
-document.getElementById('zones').innerHTML=zones(ftp);
-if(document.getElementById('foodDate'))renderFood();
-}
-function zones(ftp){
-const z=[['Herstel',.0,.55],['Duur / Zone 2',.56,.75],['Tempo',.76,.90],['Drempel',.91,1.05],['VO2max',1.06,1.20],['Anaeroob',1.21,1.5]];
-return '<table><tr><th>Zone</th><th>Vermogen</th></tr>'+z.map(x=>`<tr><td>${x[0]}</td><td>${Math.round(ftp*x[1])}–${Math.round(ftp*x[2])} W</td></tr>`).join('')+'</table>';
-}
-function saveSettings(){
-db.settings={...db.settings,weight:num('sWeight')??db.settings.weight,goalWeight:num('sGoalWeight')??db.settings.goalWeight,ftp:num('sFtp')??db.settings.ftp,height:num('sHeight')??db.settings.height,age:num('sAge')??db.settings.age,frequency:num('sFrequency')??db.settings.frequency,protein:num('sProtein')??db.settings.protein,calories:num('sCalories')??db.settings.calories};
-save();alert('Instellingen opgeslagen.');
-}
-function exportData(){
-const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
-downloadBlob(blob,'fietscoach-backup-'+today()+'.json');
-}
-function downloadBlob(blob,name){
-const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-function importData(){
-const file=document.getElementById('importFile').files[0];if(!file){alert('Kies eerst een back-upbestand.');return}
-const reader=new FileReader();
-reader.onload=()=>{try{
-const incoming=JSON.parse(reader.result);
-if(!incoming||typeof incoming!=='object')throw Error('Ongeldig bestand');
-if(!confirm('De huidige gegevens worden vervangen door de gegevens uit deze back-up. Doorgaan?'))return;
-db={...incoming,foods:Array.isArray(incoming.foods)?incoming.foods:[],trainings:Array.isArray(incoming.trainings)?incoming.trainings:[],mornings:Array.isArray(incoming.mornings)?incoming.mornings:[],customProducts:Array.isArray(incoming.customProducts)?incoming.customProducts:[],cholesterol:Array.isArray(incoming.cholesterol)?incoming.cholesterol:[],settings:{...db.settings,...(incoming.settings||{})}};
-save();alert('Back-up teruggezet.');
-}catch(e){alert('Dit bestand kon niet worden ingelezen.');}};
-reader.readAsText(file);
-}
-function exportCSV(){
-const fields=['date','source','type','duration','distance','power','maxPower','hr','maxHr','cadence','load','calories','note'];
-const rows=[fields.join(';'),...db.trainings.map(x=>fields.map(k=>'"'+String(x[k]??'').replace(/"/g,'""')+'"').join(';'))];
-downloadBlob(new Blob(['\ufeff'+rows.join('\n')],{type:'text/csv;charset=utf-8'}),'trainingen-'+today()+'.csv');
-}
-function clearData(){
-if(!confirm('Weet je zeker dat je alle gegevens wilt wissen? Maak eerst een back-up!'))return;
-if(!confirm('Dit kan niet ongedaan worden gemaakt. Echt alles wissen?'))return;
-localStorage.removeItem(KEY);location.reload();
-}
-function loadSettings(){
-const s=db.settings;
-set('sWeight',s.weight);set('sGoalWeight',s.goalWeight);set('sFtp',s.ftp);set('sHeight',s.height);set('sAge',s.age);set('sFrequency',s.frequency);set('sProtein',s.protein);set('sCalories',s.calories);
-}
-setDefaults();
-loadSettings();
-render();
+const products=()=>[...BUILTIN_PRODUCTS,...db.customProducts.map(p=>[p.name,p.portion,p.kcal,p.protein,p.carbs,p.fat,p.sat,p.fiber])];
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){alert('Opslaan is niet gelukt. Controleer de beschikbare opslagruimte van je browser.')}}
+function show(page){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===page));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));render()}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>show(b.dataset.page)));
+function initDates(){['foodDate','cholDate','trainDate','recDate'].forEach(id=>val(id,today()))}
+function initProducts(){const q=$('foodSearch').value.toLowerCase();const list=products().filter(p=>p[0].toLowerCase().includes(q));$('foodProduct').innerHTML=list.map(p=>`<option value="${esc(p[0])}">${esc(p[0])} — ${esc(p[1])}</option>`).join('');productInfo()}
+function selectedProduct(){return products().find(p=>p[0]===$('foodProduct').value)}
+function productInfo(){const p=selectedProduct();$('productInfo').textContent=p?`${p[1]}: ${p[2]} kcal · eiwit ${p[3]} g · koolhydraten ${p[4]} g · vet ${p[5]} g · verzadigd vet ${p[6]??'onbekend'} g`:''}
+$('foodSearch').addEventListener('input',initProducts);$('foodProduct').addEventListener('change',productInfo);
+$('addFood').onclick=()=>{const p=selectedProduct(),qty=n('foodQty');if(!p||!qty||qty<=0)return alert('Kies een product en vul een geldig aantal porties in.');db.foods.push({id:Date.now(),date:$('foodDate').value||today(),meal:$('foodMeal').value,name:p[0],portion:p[1],qty,kcal:p[2],protein:p[3],carbs:p[4],fat:p[5],sat:p[6],fiber:p[7]??null});save();render();$('foodQty').value=1};
+$('saveProduct').onclick=()=>{const name=$('newName').value.trim(),portion=$('newPortion').value.trim();if(!name||!portion||n('newKcal')==null)return alert('Vul minimaal naam, portie en calorieën in.');if(products().some(p=>p[0].toLowerCase()===name.toLowerCase()))return alert('Dit product staat al in de lijst.');db.customProducts.push({name,portion,kcal:n('newKcal'),protein:n('newProtein')??0,carbs:n('newCarbs')??0,fat:n('newFat')??0,sat:n('newSat'),fiber:n('newFiber')});save();['newName','newPortion','newKcal','newProtein','newCarbs','newFat','newSat','newFiber'].forEach(id=>val(id,''));initProducts();alert('Product bewaard. Het blijft beschikbaar in je productenlijst.')};
+function totals(rows){return ['kcal','protein','carbs','fat','sat','fiber'].map(k=>rows.reduce((s,r)=>s+(Number(r[k]??0)*r.qty),0))}
+function removeFrom(arr,id){if(confirm('Weet je zeker dat je deze registratie wilt verwijderen?')){db[arr]=db[arr].filter(x=>x.id!==id);save();render()}}
+function renderFood(){const rows=db.foods.filter(x=>x.date===$('foodDate').value);const t=totals(rows);$('foodTotals').innerHTML=`<div class="grid3">${[['Calorieën',fmt(t[0],0)+' kcal'],['Eiwit',fmt(t[1])+' g'],['Koolhydraten',fmt(t[2])+' g'],['Vet',fmt(t[3])+' g'],['Verzadigd vet',fmt(t[4])+' g'],['Vezels',fmt(t[5])+' g']].map(a=>`<div class="stat"><strong>${a[1]}</strong><span>${a[0]}</span></div>`).join('')}</div>`;$('foodList').innerHTML=rows.length?rows.map(r=>`<div class="item"><div><b>${esc(r.name)}</b><small>${esc(r.meal)} · ${fmt(r.qty)} × ${esc(r.portion)} · ${fmt(r.kcal*r.qty,0)} kcal</small></div><button class="btn danger small" onclick="removeFrom('foods',${r.id})">Verwijder</button></div>`).join(''):'<p class="muted">Nog niets gegeten geregistreerd op deze datum.</p>'}
+$('foodDate').addEventListener('change',renderFood);
+$('saveChol').onclick=()=>{const row={id:Date.now(),date:$('cholDate').value||today(),fasting:$('cholFasting').value,total:n('cholTotal'),ldl:n('cholLDL'),hdl:n('cholHDL'),trig:n('cholTrig'),non:n('cholNon'),note:$('cholNote').value};if(![row.total,row.ldl,row.hdl,row.trig,row.non].some(x=>x!=null))return alert('Vul minimaal één cholesterolwaarde in.');db.cholesterol.push(row);save();['cholTotal','cholLDL','cholHDL','cholTrig','cholNon','cholNote'].forEach(id=>val(id,''));render()};
+$('saveTraining').onclick=()=>{const row={id:Date.now(),date:$('trainDate').value||today(),type:$('trainType').value,duration:n('trainDuration'),distance:n('trainDistance'),power:n('trainPower'),hr:n('trainHR'),speed:n('trainSpeed'),feel:n('trainFeel'),note:$('trainNote').value};if(!row.duration)return alert('Vul de trainingsduur in.');db.trainings.push(row);save();['trainDuration','trainDistance','trainPower','trainHR','trainSpeed','trainFeel','trainNote'].forEach(id=>val(id,''));render()};
+$('saveRecovery').onclick=()=>{const h=n('sleepHours')??0,m=n('sleepMinutes')??0;if(m>59)return alert('Slaapminuten moeten tussen 0 en 59 liggen.');const row={id:Date.now(),date:$('recDate').value||today(),weight:n('recWeight'),sleep:(h*60+m)/60,rhr:n('recRhr'),hrv:n('recHrv'),bb:n('recBB'),fatigue:n('recFatigue'),soreness:n('recSoreness'),stress:n('recStress'),feeling:$('recFeeling').value,note:$('recNote').value};if(![row.weight,row.sleep,row.rhr,row.hrv,row.bb,row.fatigue,row.soreness,row.stress].some(x=>x!=null))return alert('Vul ten minste één herstelgegeven in.');db.mornings.push(row);save();['recWeight','sleepHours','sleepMinutes','recRhr','recHrv','recBB','recFatigue','recSoreness','recStress','recNote'].forEach(id=>val(id,''));val('recFeeling','');render()};
+function recoveryScore(r){let score=0,count=0;if(r.sleep!=null){score+=r.sleep>=7.5?2:r.sleep>=6.5?1:0;count++}if(r.hrv!=null){const prev=db.mornings.filter(x=>x.date<r.date&&x.hrv!=null).slice(-7);if(prev.length){const avg=prev.reduce((s,x)=>s+x.hrv,0)/prev.length;score+=r.hrv>=avg*.95?2:r.hrv>=avg*.85?1:0}else{score+=1}count++}if(r.rhr!=null){const prev=db.mornings.filter(x=>x.date<r.date&&x.rhr!=null).slice(-7);if(prev.length){const avg=prev.reduce((s,x)=>s+x.rhr,0)/prev.length;score+=r.rhr<=avg+2?2:r.rhr<=avg+5?1:0}else score+=1;count++}if(r.fatigue!=null){score+=r.fatigue<=3?2:r.fatigue<=6?1:0;count++}if(r.soreness!=null){score+=r.soreness<=3?2:r.soreness<=6?1:0;count++}if(r.stress!=null){score+=r.stress<=4?2:r.stress<=7?1:0;count++}return count?score/(count*2):null}
+function adviceFor(r){const s=recoveryScore(r);if(s==null)return'Er zijn nog te weinig gegevens voor een herstelbeoordeling.';let text=s>=.75?'<b class="good">Herstelbeeld: gunstig.</b> Een normale training lijkt passend als je je ook goed voelt.':s>=.45?'<b>Herstelbeeld: gemiddeld.</b> Houd de training gecontroleerd en kijk hoe je lichaam reageert.':'<b class="bad">Herstelbeeld: aandacht nodig.</b> Kies liever voor rust of een zeer rustige herstelrit.';if(r.feeling==='Niet fit / ziekig')text+=' Omdat je aangeeft niet fit of ziekig te zijn: neem rust en train niet bij koorts of duidelijke ziekteverschijnselen.';if(r.note)text+=`<p class="hint">Bijzonderheden: ${esc(r.note)}</p>`;return text}
+function renderRecovery(){const r=[...db.mornings].sort((a,b)=>b.date.localeCompare(a.date))[0];$('recoveryAdvice').innerHTML=r?`<span class="pill">${esc(r.date)}</span><p>${adviceFor(r)}</p><p class="hint">Slaap: ${fmt(r.sleep)} uur (${Math.floor(r.sleep||0)} uur en ${Math.round(((r.sleep||0)%1)*60)} min) · HRV: ${fmt(r.hrv,0)} ms · rusthartslag: ${fmt(r.rhr,0)} bpm</p>`:'Nog geen herstelgegevens ingevuld.';$('recoveryList').innerHTML=db.mornings.length?[...db.mornings].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="item"><div><b>${esc(x.date)}</b><small>Gewicht ${fmt(x.weight)} kg · slaap ${fmt(x.sleep)} u · HRV ${fmt(x.hrv,0)} · rustpols ${fmt(x.rhr,0)}</small></div><button class="btn danger small" onclick="removeFrom('mornings',${x.id})">Verwijder</button></div>`).join(''):'Nog geen gegevens.'}
+function render(){renderFood();renderRecovery();$('cholList').innerHTML=db.cholesterol.length?[...db.cholesterol].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="item"><div><b>${esc(x.date)}</b><small>Totaal ${fmt(x.total)} · LDL ${fmt(x.ldl)} · HDL ${fmt(x.hdl)} · TG ${fmt(x.trig)} · nuchter: ${esc(x.fasting||'onbekend')} ${x.note?'· '+esc(x.note):''}</small></div><button class="btn danger small" onclick="removeFrom('cholesterol',${x.id})">Verwijder</button></div>`).join(''):'Nog geen metingen ingevoerd.';$('trainingList').innerHTML=db.trainings.length?[...db.trainings].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="item"><div><b>${esc(x.date)} · ${esc(x.type)}</b><small>${fmt(x.duration,0)} min · ${fmt(x.distance)} km · ${fmt(x.power,0)} W · gevoel ${fmt(x.feel,0)}/10 ${x.note?'· '+esc(x.note):''}</small></div><button class="btn danger small" onclick="removeFrom('trainings',${x.id})">Verwijder</button></div>`).join(''):'Nog geen trainingen geregistreerd.';renderDashboard();renderCoach();renderCharts()}
+function latest(arr,key){return [...arr].filter(x=>x[key]!=null).sort((a,b)=>b.date.localeCompare(a.date))[0]}
+function renderDashboard(){const w=latest(db.mornings,'weight'),ftp=db.settings.ftp;$('dashStats').innerHTML=`<div class="stat"><strong>${fmt(w?.weight??db.settings.weight)} kg</strong><span>Gewicht</span></div><div class="stat"><strong>${fmt(ftp,0)} W</strong><span>FTP (instelling)</span></div><div class="stat"><strong>${db.trainings.length}</strong><span>Trainingen vastgelegd</span></div>`;const rows=db.foods.filter(x=>x.date===today()),t=totals(rows);$('todaySummary').innerHTML=rows.length?`${rows.length} voedingsregels · ${fmt(t[0],0)} kcal · ${fmt(t[1])} g eiwit · ${fmt(t[4])} g verzadigd vet`:'Nog geen voeding of herstel geregistreerd voor vandaag.';const r=latest(db.mornings,'date');$('dashAdvice').innerHTML=r?adviceFor(r):'Vul je herstel, voeding en trainingen in. Dan bouwt de coach een persoonlijk beeld op.'}
+function renderCoach(){let msgs=[];const r=latest(db.mornings,'date');if(r)msgs.push(adviceFor(r));const s=db.settings;if(s.ftp&&s.weight)msgs.push(`Je ingestelde FTP/gewicht-verhouding is ${(s.ftp/s.weight).toFixed(2).replace('.',',')} W/kg.`);const todayRows=db.foods.filter(x=>x.date===today());if(todayRows.length){const t=totals(todayRows);if(s.protein)msgs.push(`Vandaag heb je ${fmt(t[1])} g eiwit geregistreerd tegenover je doel van ${s.protein} g.`);if(s.sat)msgs.push(`Verzadigd vet vandaag: ${fmt(t[4])} g. Richtwaarde in je instellingen: ${s.sat} g.`)}$('coachAdvice').innerHTML=msgs.length?msgs.map(x=>`<p>${x}</p>`).join(''):'Voer eerst enkele dagen gegevens in om een bruikbare trend te krijgen.'}
+function drawChart(id,points,label){const c=$(id),ctx=c.getContext('2d'),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);ctx.strokeStyle='#dce4e9';ctx.beginPath();ctx.moveTo(40,12);ctx.lineTo(40,h-30);ctx.lineTo(w-10,h-30);ctx.stroke();if(points.length<2){ctx.fillStyle='#637381';ctx.font='16px sans-serif';ctx.fillText(points.length?'Eén meting vastgelegd':'Nog geen gegevens',55,80);return}const vals=points.map(p=>p.v),min=Math.min(...vals),max=Math.max(...vals),range=max-min||1;ctx.strokeStyle='#246b8e';ctx.lineWidth=3;ctx.beginPath();points.forEach((p,i)=>{const x=45+i*(w-65)/(points.length-1),y=h-32-(p.v-min)/range*(h-60);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();ctx.fillStyle='#637381';ctx.font='12px sans-serif';ctx.fillText(fmt(max),4,22);ctx.fillText(fmt(min),4,h-34);ctx.fillText(label,50,h-8)}
+function renderCharts(){drawChart('weightChart',db.mornings.filter(x=>x.weight!=null).sort((a,b)=>a.date.localeCompare(b.date)).map(x=>({v:x.weight})),'kg');drawChart('hrvChart',db.mornings.filter(x=>x.hrv!=null).sort((a,b)=>a.date.localeCompare(b.date)).map(x=>({v:x.hrv})),'ms');const weeks={};db.trainings.forEach(x=>{const d=new Date(x.date+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));const k=d.toLocaleDateString('nl-NL');weeks[k]=(weeks[k]||0)+(x.duration||0)});drawChart('trainingChart',Object.entries(weeks).map(([k,v])=>({v})).slice(-10),'minuten per week')}
+const settingsMap={sAge:'age',sHeight:'height',sWeight:'weight',sGoalWeight:'goalWeight',sFTP:'ftp',sLTHR:'lthr',sMaxHR:'maxHR',sProtein:'protein',sSat:'sat',sFiber:'fiber',sCalAdj:'calorieAdj'};
+function loadSettings(){Object.entries(settingsMap).forEach(([id,k])=>val(id,db.settings[k]))}
+$('saveSettings').onclick=()=>{Object.entries(settingsMap).forEach(([id,k])=>{db.settings[k]=n(id)});save();$('settingsSaved').textContent='Instellingen opgeslagen.';render()};
+$('exportBackup').onclick=()=>{const blob=new Blob([JSON.stringify({version:2,exportedAt:new Date().toISOString(),db},null,2)],{type:'application/json'});download(blob,'fietscoach-backup-'+today()+'.json')};
+function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+$('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const obj=JSON.parse(await f.text()),x=obj.db||obj;if(!confirm('De huidige gegevens worden vervangen door de gegevens uit deze back-up. Doorgaan?'))return;db={...blank(),...x,settings:{...(x.settings||{})}};save();loadSettings();render();alert('Back-up hersteld.')}catch(err){alert('Dit back-upbestand kan niet worden gelezen.')}e.target.value=''};
+$('exportCSV').onclick=()=>{const rows=[['Datum','Maaltijd','Product','Portie','Aantal','Kcal','Eiwit','Koolhydraten','Vet','Verzadigd vet'],...db.foods.map(x=>[x.date,x.meal,x.name,x.portion,x.qty,x.kcal,x.protein,x.carbs,x.fat,x.sat])];const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\n');download(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),'voedingsdagboek-'+today()+'.csv')};
+initDates();initProducts();loadSettings();render();
 </script>
-</body>
-</html>
+</body></html>
